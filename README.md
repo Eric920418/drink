@@ -1,8 +1,28 @@
 # 茶客棧 TeaInn - 飲料店官網
 
-茶客棧官方網站，展示品牌形象、茶品菜單、門市據點與加盟資訊。
+茶客棧官方網站，展示品牌形象、茶品菜單、門市據點與加盟資訊。含完整 CMS 後台管理系統。
 
 原始設計稿：[Figma](https://www.figma.com/design/2AX2u5R69cN4WfxmRvFEO4/%E9%A3%B2%E6%96%99%E5%BA%97%E5%AE%98%E7%B6%B2%E8%A8%AD%E8%A8%88)
+
+## 功能特色
+
+### 前台網站
+- 品牌形象展示
+- 茶品菜單瀏覽
+- 門市據點查詢
+- 活動與促銷資訊
+- 加盟資訊
+- 聯絡表單
+
+### CMS 後台管理
+- **產品管理**：新增、編輯、刪除產品，設定分類、價格、尺寸、加料選項
+- **分類管理**：管理產品分類
+- **門市管理**：管理門市據點資訊
+- **活動管理**：管理活動與促銷
+- **促銷管理**：管理首頁促銷橫幅
+- **頁面內容**：編輯首頁各區塊內容（Hero、關於、聯絡等）
+- **聯絡訊息**：查看和管理客戶聯絡訊息
+- **網站設定**：設定網站基本資訊
 
 ## 設計理念
 
@@ -35,22 +55,62 @@
 - **UI 組件**: Radix UI + shadcn/ui
 - **圖標**: Lucide React
 - **字體**: Google Fonts (Noto Serif TC, Noto Sans TC)
+- **資料庫**: PostgreSQL (Neon)
+- **ORM**: Prisma 7
+- **認證**: NextAuth.js
+- **圖片存儲**: Cloudflare R2 (可選)
 
 ## 開發環境
 
-### 安裝依賴
+### 1. 安裝依賴
 
 ```bash
 pnpm install
 ```
 
-### 啟動開發伺服器
+### 2. 環境變數設定
+
+複製 `.env.example` 或建立 `.env` 檔案：
+
+```env
+# Database - Neon PostgreSQL
+DATABASE_URL="postgresql://..."
+
+# NextAuth
+NEXTAUTH_SECRET="your-super-secret-key"
+NEXTAUTH_URL="http://localhost:3000"
+
+# Admin credentials
+ADMIN_USERNAME="admin"
+ADMIN_PASSWORD="admin123"
+
+# Cloudflare R2 Storage (可選)
+R2_ENDPOINT="https://xxx.r2.cloudflarestorage.com"
+R2_BUCKET_NAME="drink"
+R2_ACCESS_KEY_ID=""
+R2_SECRET_ACCESS_KEY=""
+R2_PUBLIC_URL=""
+```
+
+### 3. 資料庫設定
+
+```bash
+# 執行資料庫遷移
+npx prisma migrate dev
+
+# 導入種子數據
+pnpm db:seed
+```
+
+### 4. 啟動開發伺服器
 
 ```bash
 pnpm dev
 ```
 
-開啟瀏覽器訪問 [http://localhost:3000](http://localhost:3000)
+- 前台：[http://localhost:3000](http://localhost:3000)
+- 後台：[http://localhost:3000/admin](http://localhost:3000/admin)
+- 預設帳號：admin / admin123
 
 ### 生產構建
 
@@ -63,43 +123,127 @@ pnpm start
 
 ```
 /drink
-├── app/                    # Next.js App Router
-│   ├── layout.tsx          # 根佈局（含字體配置）
-│   ├── page.tsx            # 首頁
-│   └── globals.css         # 全局樣式 (設計系統)
-├── components/             # React 組件
-│   ├── Navigation.tsx      # 導航欄（印章 Logo + 透明/實色切換）
-│   ├── Hero.tsx            # 首頁主視覺（水墨風格 + 視差滾動）
-│   ├── About.tsx           # 關於我們（茶道哲學）
-│   ├── Products.tsx        # 茶品菜單（分類篩選 + 印章價格標籤）
-│   ├── Events.tsx          # 活動專區
-│   ├── Franchise.tsx       # 加盟資訊
-│   ├── Stores.tsx          # 門市據點
-│   ├── Contact.tsx         # 聯絡我們
-│   ├── Footer.tsx          # 頁尾
-│   ├── figma/              # Figma 衍生組件
-│   │   └── ImageWithFallback.tsx
-│   └── ui/                 # shadcn/ui 組件
-├── public/                 # 靜態資源
-│   └── images/
-│       └── hero-bg.png     # 首頁背景圖
-├── next.config.ts          # Next.js 配置
-├── postcss.config.mjs      # PostCSS 配置
-├── tsconfig.json           # TypeScript 配置
-└── package.json
+├── app/
+│   ├── admin/                  # CMS 後台頁面
+│   │   ├── login/              # 登入頁面
+│   │   ├── dashboard/          # 儀表板
+│   │   ├── products/           # 產品管理
+│   │   ├── categories/         # 分類管理
+│   │   ├── stores/             # 門市管理
+│   │   ├── events/             # 活動管理
+│   │   ├── promotions/         # 促銷管理
+│   │   ├── content/            # 頁面內容
+│   │   ├── messages/           # 聯絡訊息
+│   │   └── settings/           # 網站設定
+│   ├── api/
+│   │   ├── admin/              # 後台 API
+│   │   │   ├── products/
+│   │   │   ├── categories/
+│   │   │   ├── stores/
+│   │   │   ├── events/
+│   │   │   ├── promotions/
+│   │   │   ├── content-blocks/
+│   │   │   ├── contact-messages/
+│   │   │   ├── settings/
+│   │   │   └── upload/
+│   │   ├── auth/               # NextAuth API
+│   │   ├── products/           # 前台產品 API
+│   │   ├── categories/         # 前台分類 API
+│   │   ├── stores/             # 前台門市 API
+│   │   ├── events/             # 前台活動 API
+│   │   ├── content/            # 前台內容 API
+│   │   └── contact/            # 聯絡表單 API
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── globals.css
+├── components/
+│   ├── admin/                  # 後台組件
+│   │   ├── Sidebar.tsx
+│   │   └── ImageUploader.tsx
+│   ├── providers/
+│   │   └── SessionProvider.tsx
+│   ├── Navigation.tsx
+│   ├── Hero.tsx
+│   ├── About.tsx
+│   ├── Products.tsx
+│   ├── Events.tsx
+│   ├── Franchise.tsx
+│   ├── Stores.tsx
+│   ├── Contact.tsx
+│   └── Footer.tsx
+├── lib/
+│   ├── prisma.ts               # Prisma Client
+│   ├── auth.ts                 # NextAuth 配置
+│   ├── api-auth.ts             # API 認證工具
+│   └── r2.ts                   # R2 上傳工具
+├── prisma/
+│   ├── schema.prisma           # 資料庫 Schema
+│   ├── seed.ts                 # 種子數據
+│   └── migrations/             # 遷移檔案
+└── public/
 ```
 
-## 頁面區塊
+## 資料庫 Schema
 
-1. **Navigation** - 固定頂部導航，印章風格 Logo，滾動時背景切換
-2. **Hero** - 全螢幕水墨主視覺，茶葉飄落動畫，視差滾動效果
-3. **About** - 茶道哲學區塊，浮動引言卡片
-4. **Products** - 茶品展示，印章風格價格標籤，分類篩選
-5. **Events** - 活動專區，交錯佈局
-6. **Franchise** - 加盟資訊，流程時間軸
-7. **Stores** - 門市據點卡片
-8. **Contact** - 聯絡表單
-9. **Footer** - 品牌資訊與訂閱功能
+### 主要模型
+
+- **Admin** - 管理員帳號
+- **Category** - 產品分類
+- **Product** - 產品（含尺寸、加料）
+- **ProductSize** - 產品尺寸
+- **ProductTopping** - 加料選項
+- **Store** - 門市據點
+- **Event** - 活動
+- **Promotion** - 促銷優惠
+- **ContentBlock** - 頁面內容區塊
+- **ContactMessage** - 聯絡訊息
+- **SiteSetting** - 網站設定
+
+## API 端點
+
+### 公開 API（前台）
+
+| 方法 | 路徑 | 說明 |
+|------|------|------|
+| GET | `/api/products` | 獲取所有產品 |
+| GET | `/api/categories` | 獲取所有分類 |
+| GET | `/api/stores` | 獲取所有門市 |
+| GET | `/api/events` | 獲取所有活動 |
+| GET | `/api/content/[key]` | 獲取頁面內容 |
+| POST | `/api/contact` | 提交聯絡表單 |
+
+### 後台 API（需認證）
+
+| 方法 | 路徑 | 說明 |
+|------|------|------|
+| GET/POST | `/api/admin/products` | 產品列表/新增 |
+| GET/PUT/DELETE | `/api/admin/products/[id]` | 產品詳情/更新/刪除 |
+| GET/POST | `/api/admin/categories` | 分類列表/新增 |
+| GET/PUT/DELETE | `/api/admin/categories/[id]` | 分類詳情/更新/刪除 |
+| GET/POST | `/api/admin/stores` | 門市列表/新增 |
+| GET/PUT/DELETE | `/api/admin/stores/[id]` | 門市詳情/更新/刪除 |
+| GET/POST | `/api/admin/events` | 活動列表/新增 |
+| GET/PUT/DELETE | `/api/admin/events/[id]` | 活動詳情/更新/刪除 |
+| GET/POST | `/api/admin/promotions` | 促銷列表/新增 |
+| GET/PUT/DELETE | `/api/admin/promotions/[id]` | 促銷詳情/更新/刪除 |
+| GET/POST | `/api/admin/content-blocks` | 內容區塊列表/新增 |
+| GET/PUT/DELETE | `/api/admin/content-blocks/[key]` | 內容區塊詳情/更新/刪除 |
+| GET | `/api/admin/contact-messages` | 聯絡訊息列表 |
+| GET/PUT/DELETE | `/api/admin/contact-messages/[id]` | 訊息詳情/更新/刪除 |
+| GET/POST | `/api/admin/settings` | 網站設定 |
+| POST | `/api/admin/upload` | 圖片上傳 |
+
+## 指令
+
+```bash
+pnpm dev          # 啟動開發伺服器
+pnpm build        # 生產構建
+pnpm start        # 啟動生產伺服器
+pnpm lint         # 程式碼檢查
+pnpm db:seed      # 導入種子數據
+pnpm db:push      # 推送 Schema 到資料庫
+pnpm db:studio    # 開啟 Prisma Studio
+```
 
 ## 設計系統
 
@@ -133,3 +277,71 @@ pnpm start
 - `.animate-float` - 茶葉漂浮動畫
 - `.animate-ink` - 墨暈擴散動畫
 - `.font-serif` - 書法風格標題字體
+
+## 注意事項
+
+### R2 圖片存儲設定
+
+如果要使用 Cloudflare R2 存儲圖片，需要：
+
+1. 在 Cloudflare Dashboard 建立 R2 Bucket
+2. 創建 API Token（需要 R2 讀寫權限）
+3. 設定公開存取（如需要）
+4. 在 `.env` 填入相關憑證
+
+如果未配置 R2，圖片將存儲在本地 `/public/uploads` 目錄。
+
+## Vercel 部署
+
+### 1. 連接 GitHub 倉庫
+
+將專案推送到 GitHub，然後在 Vercel 導入專案。
+
+### 2. 設置環境變數
+
+在 Vercel 專案設定中添加以下環境變數：
+
+```
+DATABASE_URL=postgresql://neondb_owner:xxx@ep-xxx.aws.neon.tech/neondb?sslmode=require
+NEXTAUTH_SECRET=your-super-secret-key-change-in-production
+NEXTAUTH_URL=https://your-domain.vercel.app
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=your-secure-password
+
+# Cloudflare R2（必須設定，Vercel 無法使用本地存儲）
+R2_ENDPOINT=https://xxx.r2.cloudflarestorage.com
+R2_BUCKET_NAME=drink
+R2_ACCESS_KEY_ID=your-access-key-id
+R2_SECRET_ACCESS_KEY=your-secret-access-key
+R2_PUBLIC_URL=https://your-r2-public-url
+```
+
+### 3. Cloudflare R2 設定
+
+1. 登入 [Cloudflare Dashboard](https://dash.cloudflare.com)
+2. 進入 R2 Object Storage
+3. 創建 Bucket（如果尚未創建）
+4. 進入「Manage R2 API Tokens」創建 API Token
+5. 選擇「Object Read & Write」權限
+6. 複製 Access Key ID 和 Secret Access Key
+7. 如需公開存取，設定 Bucket 的 Public Access 或使用 Custom Domain
+
+### 4. 部署
+
+Vercel 會自動檢測 Next.js 專案並部署。
+
+### 5. 初始化資料庫
+
+部署後，在本地執行種子腳本來初始化資料：
+
+```bash
+pnpm db:seed
+```
+
+### 生產環境注意事項
+
+1. 更改 `NEXTAUTH_SECRET` 為安全的隨機字串
+2. 更改管理員密碼
+3. 設定正確的 `NEXTAUTH_URL`（你的 Vercel 域名）
+4. 確保資料庫連接安全
+5. **R2 必須正確配置**，否則圖片上傳功能無法使用

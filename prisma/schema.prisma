@@ -1,0 +1,190 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// 管理員帳號
+// ============================================
+model Admin {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String   // bcrypt hashed
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// 產品分類
+// ============================================
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique // 純茶、經典、特調、水果等
+  slug        String    @unique
+  description String?
+  order       Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+}
+
+// ============================================
+// 產品
+// ============================================
+model Product {
+  id           Int       @id @default(autoincrement())
+  name         String    // 產品名稱
+  slug         String    @unique
+  description  String?   // 產品描述
+  price        Int       // 基本價格（新台幣）
+  image        String?   // 產品圖片 URL
+  categoryId   Int
+  category     Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  // 產品規格
+  sizes        ProductSize[]
+  toppings     ProductTopping[]
+
+  // 產品設定
+  isActive     Boolean   @default(true)
+  isFeatured   Boolean   @default(false) // 是否為推薦產品
+  isNew        Boolean   @default(false) // 是否為新品
+  order        Int       @default(0)
+
+  // 額外資訊
+  calories     Int?      // 熱量
+  tags         String[]  // 標籤：冰品、熱飲、季節限定等
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// ============================================
+// 產品尺寸/規格
+// ============================================
+model ProductSize {
+  id          Int      @id @default(autoincrement())
+  productId   Int
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name        String   // M、L、XL
+  priceAdd    Int      @default(0) // 加價金額
+  isDefault   Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// 加料選項
+// ============================================
+model ProductTopping {
+  id          Int      @id @default(autoincrement())
+  productId   Int
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name        String   // 珍珠、椰果、布丁等
+  price       Int      @default(0) // 加價金額
+  isAvailable Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// 門市
+// ============================================
+model Store {
+  id           Int      @id @default(autoincrement())
+  name         String   // 門市名稱
+  slug         String   @unique
+  address      String   // 地址
+  phone        String?  // 電話
+  openingHours String   // 營業時間
+  image        String?  // 門市圖片
+  features     String[] // 特色標籤：外帶、內用、包場等
+  mapUrl       String?  // Google Maps 連結
+  orderUrl     String?  // 線上訂購連結
+  isActive     Boolean  @default(true)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ============================================
+// 活動
+// ============================================
+model Event {
+  id           Int       @id @default(autoincrement())
+  title        String    // 活動標題
+  slug         String    @unique
+  subtitle     String?   // 副標題
+  description  String?   // 活動描述
+  image        String?   // 活動圖片
+  category     String?   // 活動分類：新品、優惠、課程等
+  startDate    DateTime? // 開始日期
+  endDate      DateTime? // 結束日期
+  isActive     Boolean   @default(true)
+  isFeatured   Boolean   @default(false)
+  order        Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// ============================================
+// 促銷優惠（首頁橫幅）
+// ============================================
+model Promotion {
+  id          Int      @id @default(autoincrement())
+  title       String   // 優惠標題
+  description String?  // 優惠描述
+  icon        String?  // 圖標名稱
+  link        String?  // 連結
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// 頁面內容區塊（用於 Hero、About、Contact 等）
+// ============================================
+model ContentBlock {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique // hero, about, franchise, contact, footer 等
+  payload   Json     @default("{}") // 動態 JSON 內容
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// 聯絡訊息
+// ============================================
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String?
+  email     String
+  subject   String?  // 主旨
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// 網站設定
+// ============================================
+model SiteSetting {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique // siteName, logo, phone, email, address 等
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
