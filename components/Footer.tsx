@@ -28,7 +28,7 @@ export function Footer() {
                 alt="茶客棧 TeaInn"
                 width={180}
                 height={70}
-                className="h-14 w-auto object-contain"
+                className="h-20 w-auto object-contain"
               />
             </div>
 

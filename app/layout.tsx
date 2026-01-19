@@ -17,7 +17,7 @@ const notoSansTC = Noto_Sans_TC({
 })
 
 export const metadata: Metadata = {
-  title: '茶客棧 TeaInn - 尋常品茗，不尋常的堅持',
+  title: '茶客棧',
   description: '茶客棧 - 在快節奏的都市中，為您保留一方寧靜的茶香天地。堅持古法炮製，精選台灣茶葉。',
 }
 
