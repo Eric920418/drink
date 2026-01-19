@@ -112,29 +112,6 @@ export function Events() {
           ))}
         </div>
 
-        {/* Promotion Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-20 bg-paper-cream p-12 lg:p-16"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-            {[
-              { icon: Gift, title: '新會員禮', desc: '註冊即送招牌飲品兌換券' },
-              { icon: Users, title: '好友分享', desc: '推薦朋友雙方各得優惠' },
-              { icon: Calendar, title: '生日禮', desc: '壽星當月享特別優惠' },
-            ].map(({ icon: Icon, title, desc }) => (
-              <div key={title}>
-                <div className="w-16 h-16 bg-tea-ink flex items-center justify-center mx-auto mb-4">
-                  <Icon className="w-7 h-7 text-tea-sage" />
-                </div>
-                <h3 className="font-serif text-xl text-tea-ink mb-2">{title}</h3>
-                <p className="text-stone-gray text-sm">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   )
