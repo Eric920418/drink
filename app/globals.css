@@ -1,0 +1,222 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ===== 茶客棧設計系統 ===== */
+/* 東方墨韻 × 現代極簡 */
+
+:root {
+  /* 主色調 - 翡翠綠（Logo 色系） */
+  --tea-ink: #013d18;           /* 深翡翠 - 最深背景 */
+  --tea-forest: #015e24;        /* 品牌綠 - Logo 主色 */
+  --tea-jade: #1a7a3a;          /* 翠玉綠 - 強調色 */
+  --tea-sage: #5a9a6a;          /* 淺翠綠 */
+  --tea-mint: #8bc4a0;          /* 薄荷綠 - 最淺 */
+
+  /* 輔助色 - 宣紙絹白 */
+  --silk-white: #f8f6f2;        /* 絹白 */
+  --paper-cream: #edeae3;       /* 宣紙色 */
+  --warm-sand: #d8d4c9;         /* 暖沙 */
+
+  /* 點綴色 - 金箔茶器 */
+  --terracotta: #c4964a;        /* 金銅色 */
+  --rust-copper: #d4a85a;       /* 淺金色 */
+  --deep-amber: #9a7a3a;        /* 深金色 */
+
+  /* 中性色 */
+  --ink-black: #1a1a18;         /* 墨黑 */
+  --charcoal: #3d3d38;          /* 炭灰 */
+  --stone-gray: #6b6b63;        /* 石灰 */
+  --mist-gray: #a8a89f;         /* 霧灰 */
+
+  /* 字體 */
+  --font-serif: 'Noto Serif TC', serif;
+  --font-sans: 'Noto Sans TC', sans-serif;
+
+  /* 尺寸 */
+  --radius: 0;
+  --radius-soft: 2px;
+
+  /* 系統變數映射 */
+  --background: var(--silk-white);
+  --foreground: var(--ink-black);
+  --primary: var(--tea-ink);
+  --primary-foreground: var(--silk-white);
+  --secondary: var(--paper-cream);
+  --secondary-foreground: var(--tea-ink);
+  --muted: var(--warm-sand);
+  --muted-foreground: var(--stone-gray);
+  --accent: var(--tea-jade);
+  --accent-foreground: var(--silk-white);
+  --border: rgba(26, 47, 35, 0.12);
+  --ring: var(--tea-jade);
+}
+
+@theme inline {
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+
+  /* 茶客棧專用色 */
+  --color-tea-ink: var(--tea-ink);
+  --color-tea-forest: var(--tea-forest);
+  --color-tea-jade: var(--tea-jade);
+  --color-tea-sage: var(--tea-sage);
+  --color-tea-mint: var(--tea-mint);
+  --color-silk-white: var(--silk-white);
+  --color-paper-cream: var(--paper-cream);
+  --color-warm-sand: var(--warm-sand);
+  --color-terracotta: var(--terracotta);
+  --color-rust-copper: var(--rust-copper);
+  --color-deep-amber: var(--deep-amber);
+  --color-ink-black: var(--ink-black);
+  --color-charcoal: var(--charcoal);
+  --color-stone-gray: var(--stone-gray);
+  --color-mist-gray: var(--mist-gray);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-silk-white text-ink-black;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* 書法風格標題 */
+  .font-display {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  /* 東方留白風格選擇 */
+  ::selection {
+    background: var(--tea-jade);
+    color: var(--silk-white);
+  }
+}
+
+/* ===== 自訂工具類 ===== */
+@layer utilities {
+  /* 水墨紋理背景 */
+  .texture-ink {
+    background-image:
+      radial-gradient(ellipse at 20% 30%, rgba(26, 47, 35, 0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(26, 47, 35, 0.05) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-blend-mode: multiply;
+  }
+
+  /* 宣紙紋理 */
+  .texture-paper {
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5'/%3E%3CfeColorMatrix values='0 0 0 0 0.97 0 0 0 0 0.96 0 0 0 0 0.94 0 0 0 0.3 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E");
+  }
+
+  /* 毛筆下劃線效果 */
+  .brush-underline {
+    position: relative;
+  }
+  .brush-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg,
+      var(--tea-jade) 0%,
+      var(--tea-jade) 60%,
+      transparent 100%
+    );
+    opacity: 0.7;
+    transform: skewX(-12deg);
+  }
+
+  /* 印章效果 */
+  .stamp {
+    border: 2px solid var(--terracotta);
+    padding: 0.5em 1em;
+    transform: rotate(-3deg);
+    position: relative;
+  }
+  .stamp::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border: 1px solid var(--terracotta);
+    opacity: 0.5;
+  }
+
+  /* 茶葉漂浮動畫 */
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+  }
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* 墨暈擴散動畫 */
+  @keyframes ink-spread {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { opacity: 0.3; }
+    100% { transform: scale(1.2); opacity: 0; }
+  }
+  .animate-ink {
+    animation: ink-spread 4s ease-out infinite;
+  }
+
+  /* 書卷捲動效果 */
+  @keyframes scroll-reveal {
+    from {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+    }
+  }
+  .animate-scroll {
+    animation: scroll-reveal 1.2s ease-out forwards;
+  }
+}
+
+/* ===== 滾動條樣式 ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--paper-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--tea-sage);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--tea-jade);
+}
