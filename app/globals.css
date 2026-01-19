@@ -6,28 +6,28 @@
 /* 東方墨韻 × 現代極簡 */
 
 :root {
-  /* 主色調 - 翡翠綠（Logo 色系） */
-  --tea-ink: #013d18;           /* 深翡翠 - 最深背景 */
-  --tea-forest: #015e24;        /* 品牌綠 - Logo 主色 */
-  --tea-jade: #1a7a3a;          /* 翠玉綠 - 強調色 */
-  --tea-sage: #5a9a6a;          /* 淺翠綠 */
-  --tea-mint: #8bc4a0;          /* 薄荷綠 - 最淺 */
+  /* 主色調 - 古典酒紅（品牌主色） */
+  --tea-ink: #2F090C;           /* 深酒紅 - 品牌主色 */
+  --tea-forest: #4a1518;        /* 暗紅木 */
+  --tea-jade: #6b2428;          /* 赤褐 - 強調色 */
+  --tea-sage: #8c4a4a;          /* 淺酒紅 */
+  --tea-mint: #b87070;          /* 玫瑰棕 - 最淺 */
 
   /* 輔助色 - 宣紙絹白 */
-  --silk-white: #f8f6f2;        /* 絹白 */
-  --paper-cream: #edeae3;       /* 宣紙色 */
-  --warm-sand: #d8d4c9;         /* 暖沙 */
+  --silk-white: #faf8f5;        /* 絹白 */
+  --paper-cream: #f2ede6;       /* 宣紙色 */
+  --warm-sand: #e5ddd2;         /* 暖沙 */
 
-  /* 點綴色 - 金箔茶器 */
-  --terracotta: #c4964a;        /* 金銅色 */
-  --rust-copper: #d4a85a;       /* 淺金色 */
-  --deep-amber: #9a7a3a;        /* 深金色 */
+  /* 點綴色 - 古銅金箔 */
+  --terracotta: #c9a227;        /* 古銅金 */
+  --rust-copper: #d4b84a;       /* 淺金色 */
+  --deep-amber: #a07d1c;        /* 深金色 */
 
   /* 中性色 */
-  --ink-black: #1a1a18;         /* 墨黑 */
-  --charcoal: #3d3d38;          /* 炭灰 */
-  --stone-gray: #6b6b63;        /* 石灰 */
-  --mist-gray: #a8a89f;         /* 霧灰 */
+  --ink-black: #1a1816;         /* 墨黑 */
+  --charcoal: #3d3835;          /* 炭灰 */
+  --stone-gray: #6b6460;        /* 石灰 */
+  --mist-gray: #a8a098;         /* 霧灰 */
 
   /* 字體 */
   --font-serif: 'Noto Serif TC', serif;
