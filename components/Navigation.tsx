@@ -35,7 +35,7 @@ export function Navigation() {
             scrolled ? 'h-16' : 'h-20'
           }`}>
             {/* Logo */}
-            <a href="#home" className="relative group">
+            <a href="https://ckh2013.com/" className="relative group">
               <Image
                 src="/20230321_fc059-removebg-preview.png"
                 alt="茶客棧 TeaInn"

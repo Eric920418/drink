@@ -20,7 +20,7 @@
 - **門市管理**：管理門市據點資訊
 - **活動管理**：管理活動與促銷
 - **促銷管理**：管理首頁促銷橫幅
-- **頁面內容**：編輯首頁各區塊內容（Hero、關於、聯絡等）
+- **頁面內容**：編輯首頁各區塊內容（Hero、關於、加盟、聯絡等）
 - **聯絡訊息**：查看和管理客戶聯絡訊息
 - **網站設定**：設定網站基本資訊
 
@@ -199,7 +199,7 @@ pnpm start
 - **Store** - 門市據點
 - **Event** - 活動
 - **Promotion** - 促銷優惠
-- **ContentBlock** - 頁面內容區塊
+- **ContentBlock** - 頁面內容區塊（hero、about、franchise、contact、footer）
 - **ContactMessage** - 聯絡訊息
 - **SiteSetting** - 網站設定
 
