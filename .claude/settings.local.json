@@ -14,7 +14,8 @@
       "Bash(pnpm approve-builds:*)",
       "Bash(npx prisma init)",
       "Bash(npx prisma migrate:*)",
-      "Bash(pnpm db:seed:*)"
+      "Bash(pnpm db:seed:*)",
+      "Bash(curl:*)"
     ]
   }
 }

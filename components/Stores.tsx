@@ -1,37 +1,70 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 import { MapPin, Clock } from 'lucide-react'
 import { ImageWithFallback } from './figma/ImageWithFallback'
 
-const stores = [
-  {
-    id: 1,
-    name: '信義旗艦店',
-    address: '台北市信義區信義路五段7號',
-    hours: '10:00 - 22:00',
-    features: ['外帶', '內用', '包場'],
-    image: 'https://images.unsplash.com/photo-1521917441209-e886f0404a7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWElMjBzaG9wJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY4ODA4ODkzfDA&ixlib=rb-4.1.0&q=80&w=1080'
-  },
-  {
-    id: 2,
-    name: '東區概念店',
-    address: '台北市大安區忠孝東路四段181巷',
-    hours: '11:00 - 23:00',
-    features: ['外帶', '內用'],
-    image: 'https://images.unsplash.com/photo-1521917441209-e886f0404a7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWElMjBzaG9wJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY4ODA4ODkzfDA&ixlib=rb-4.1.0&q=80&w=1080'
-  },
-  {
-    id: 3,
-    name: '西門形象店',
-    address: '台北市萬華區成都路38號',
-    hours: '11:00 - 00:00',
-    features: ['外帶', '內用', '夜間營業'],
-    image: 'https://images.unsplash.com/photo-1521917441209-e886f0404a7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWElMjBzaG9wJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY4ODA4ODkzfDA&ixlib=rb-4.1.0&q=80&w=1080'
-  },
-]
+interface Store {
+  id: string
+  name: string
+  address: string
+  phone: string | null
+  openingHours: string | null
+  image: string | null
+  features: string[]
+  mapUrl: string | null
+  orderUrl: string | null
+}
 
 export function Stores() {
+  const [stores, setStores] = useState<Store[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchStores() {
+      try {
+        setLoading(true)
+        const res = await fetch('/api/stores')
+        if (!res.ok) throw new Error('Failed to fetch stores')
+        const data = await res.json()
+        setStores(data)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching stores:', err)
+        setError(err instanceof Error ? err.message : '載入門市失敗')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchStores()
+  }, [])
+
+  if (loading) {
+    return (
+      <section id="stores" className="py-8 lg:py-16 bg-paper-cream relative overflow-hidden">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 text-center py-20">
+          <div className="animate-pulse">
+            <div className="h-8 bg-tea-ink/10 rounded w-48 mx-auto mb-4"></div>
+            <div className="h-4 bg-tea-ink/10 rounded w-64 mx-auto"></div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section id="stores" className="py-8 lg:py-16 bg-paper-cream relative overflow-hidden">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 text-center py-20">
+          <p className="text-red-600">錯誤：{error}</p>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section id="stores" className="py-8 lg:py-16 bg-paper-cream relative overflow-hidden">
       {/* 背景裝飾 */}
@@ -70,7 +103,7 @@ export function Stores() {
                 {/* Image */}
                 <div className="relative h-64 overflow-hidden">
                   <ImageWithFallback
-                    src={store.image}
+                    src={store.image || '/images/placeholder-store.jpg'}
                     alt={store.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -112,17 +145,29 @@ export function Stores() {
                     </div>
                     <div className="flex items-center gap-3">
                       <Clock className="w-4 h-4 text-terracotta flex-shrink-0" />
-                      <span className="text-charcoal text-sm">{store.hours}</span>
+                      <span className="text-charcoal text-sm">{store.openingHours || '營業時間請電洽'}</span>
                     </div>
                   </div>
 
                   <div className="flex gap-3">
-                    <button className="flex-1 py-3 bg-tea-ink text-silk-white text-sm tracking-wider hover:bg-tea-forest transition-colors">
-                      查看地圖
-                    </button>
-                    <button className="flex-1 py-3 border border-tea-ink/20 text-tea-ink text-sm tracking-wider hover:border-tea-ink transition-colors">
-                      線上訂購
-                    </button>
+                    {store.mapUrl ? (
+                      <a href={store.mapUrl} target="_blank" rel="noopener noreferrer" className="flex-1 py-3 bg-tea-ink text-silk-white text-sm tracking-wider hover:bg-tea-forest transition-colors text-center">
+                        查看地圖
+                      </a>
+                    ) : (
+                      <button className="flex-1 py-3 bg-tea-ink text-silk-white text-sm tracking-wider hover:bg-tea-forest transition-colors">
+                        查看地圖
+                      </button>
+                    )}
+                    {store.orderUrl ? (
+                      <a href={store.orderUrl} target="_blank" rel="noopener noreferrer" className="flex-1 py-3 border border-tea-ink/20 text-tea-ink text-sm tracking-wider hover:border-tea-ink transition-colors text-center">
+                        線上訂購
+                      </a>
+                    ) : (
+                      <button className="flex-1 py-3 border border-tea-ink/20 text-tea-ink text-sm tracking-wider hover:border-tea-ink transition-colors">
+                        線上訂購
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

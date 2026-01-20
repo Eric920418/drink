@@ -1,9 +1,60 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'motion/react'
-import { Mail, Phone, MapPin, Clock } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock, Loader2, CheckCircle } from 'lucide-react'
+
+interface FormData {
+  name: string
+  phone: string
+  email: string
+  subject: string
+  message: string
+}
 
 export function Contact() {
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    phone: '',
+    email: '',
+    subject: '',
+    message: ''
+  })
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSubmitting(true)
+    setError(null)
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || '提交失敗')
+      }
+
+      setSubmitted(true)
+      setFormData({ name: '', phone: '', email: '', subject: '', message: '' })
+    } catch (err) {
+      console.error('Error submitting form:', err)
+      setError(err instanceof Error ? err.message : '提交失敗，請稍後再試')
+    } finally {
+      setSubmitting(false)
+    }
+  }
   return (
     <section id="contact" className="py-8 lg:py-16 bg-tea-ink relative overflow-hidden">
       {/* 背景裝飾 */}
@@ -85,63 +136,113 @@ export function Contact() {
             className="bg-tea-forest/20 border border-silk-white/5 p-8 lg:p-10"
           >
             <h3 className="font-serif text-2xl text-silk-white mb-8">發送訊息</h3>
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            {submitted ? (
+              <div className="text-center py-12">
+                <CheckCircle className="w-16 h-16 text-tea-sage mx-auto mb-4" />
+                <h4 className="font-serif text-xl text-silk-white mb-2">訊息已送出</h4>
+                <p className="text-silk-white/50 mb-6">我們會盡快回覆您，謝謝！</p>
+                <button
+                  onClick={() => setSubmitted(false)}
+                  className="px-6 py-2 border border-tea-sage/30 text-tea-sage hover:bg-tea-sage hover:text-tea-ink transition-colors"
+                >
+                  再發一則訊息
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <div className="bg-red-500/20 border border-red-500/50 text-red-300 px-4 py-3 rounded">
+                    {error}
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-silk-white/60 text-sm mb-2">姓名 *</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="w-full bg-tea-ink/50 border border-silk-white/10 focus:border-tea-sage/50 text-silk-white px-4 py-3 outline-none transition-colors placeholder:text-silk-white/30"
+                      placeholder="請輸入您的姓名"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-silk-white/60 text-sm mb-2">電話</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full bg-tea-ink/50 border border-silk-white/10 focus:border-tea-sage/50 text-silk-white px-4 py-3 outline-none transition-colors placeholder:text-silk-white/30"
+                      placeholder="09XX-XXX-XXX"
+                    />
+                  </div>
+                </div>
+
                 <div>
-                  <label className="block text-silk-white/60 text-sm mb-2">姓名</label>
+                  <label className="block text-silk-white/60 text-sm mb-2">電子信箱 *</label>
                   <input
-                    type="text"
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
                     className="w-full bg-tea-ink/50 border border-silk-white/10 focus:border-tea-sage/50 text-silk-white px-4 py-3 outline-none transition-colors placeholder:text-silk-white/30"
-                    placeholder="請輸入您的姓名"
+                    placeholder="your@email.com"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-silk-white/60 text-sm mb-2">電話</label>
-                  <input
-                    type="tel"
-                    className="w-full bg-tea-ink/50 border border-silk-white/10 focus:border-tea-sage/50 text-silk-white px-4 py-3 outline-none transition-colors placeholder:text-silk-white/30"
-                    placeholder="09XX-XXX-XXX"
-                  />
+                  <label className="block text-silk-white/60 text-sm mb-2">主旨 *</label>
+                  <select
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-tea-ink/50 border border-silk-white/10 focus:border-tea-sage/50 text-silk-white px-4 py-3 outline-none transition-colors"
+                  >
+                    <option value="">請選擇主旨</option>
+                    <option value="產品諮詢">產品諮詢</option>
+                    <option value="加盟洽詢">加盟洽詢</option>
+                    <option value="合作提案">合作提案</option>
+                    <option value="客訴反映">客訴反映</option>
+                    <option value="其他">其他</option>
+                  </select>
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-silk-white/60 text-sm mb-2">電子信箱</label>
-                <input
-                  type="email"
-                  className="w-full bg-tea-ink/50 border border-silk-white/10 focus:border-tea-sage/50 text-silk-white px-4 py-3 outline-none transition-colors placeholder:text-silk-white/30"
-                  placeholder="your@email.com"
-                />
-              </div>
+                <div>
+                  <label className="block text-silk-white/60 text-sm mb-2">訊息內容 *</label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows={5}
+                    className="w-full bg-tea-ink/50 border border-silk-white/10 focus:border-tea-sage/50 text-silk-white px-4 py-3 outline-none transition-colors resize-none placeholder:text-silk-white/30"
+                    placeholder="請輸入您的訊息..."
+                  ></textarea>
+                </div>
 
-              <div>
-                <label className="block text-silk-white/60 text-sm mb-2">主旨</label>
-                <select className="w-full bg-tea-ink/50 border border-silk-white/10 focus:border-tea-sage/50 text-silk-white px-4 py-3 outline-none transition-colors">
-                  <option value="">請選擇主旨</option>
-                  <option value="product">產品諮詢</option>
-                  <option value="franchise">加盟洽詢</option>
-                  <option value="cooperation">合作提案</option>
-                  <option value="feedback">客訴反映</option>
-                  <option value="other">其他</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-silk-white/60 text-sm mb-2">訊息內容</label>
-                <textarea
-                  rows={5}
-                  className="w-full bg-tea-ink/50 border border-silk-white/10 focus:border-tea-sage/50 text-silk-white px-4 py-3 outline-none transition-colors resize-none placeholder:text-silk-white/30"
-                  placeholder="請輸入您的訊息..."
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-4 bg-terracotta hover:bg-rust-copper text-silk-white tracking-wider transition-colors"
-              >
-                送出訊息
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full py-4 bg-terracotta hover:bg-rust-copper disabled:bg-terracotta/50 text-silk-white tracking-wider transition-colors flex items-center justify-center gap-2"
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      送出中...
+                    </>
+                  ) : (
+                    '送出訊息'
+                  )}
+                </button>
+              </form>
+            )}
           </motion.div>
         </div>
       </div>

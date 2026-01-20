@@ -1,74 +1,92 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { ImageWithFallback } from './figma/ImageWithFallback'
 
-const categories = ['全部', '經典', '特調', '水果', '純茶']
+interface Category {
+  id: string
+  name: string
+  slug: string
+}
 
-const products = [
-  {
-    id: 1,
-    name: '老欉紅茶',
-    nameEn: 'Aged Black Tea',
-    description: '百年茶樹 / 日曬萎凋 / 炭火烘焙',
-    price: '65',
-    category: '純茶',
-    image: 'https://images.unsplash.com/photo-1693114812744-ed1b09d05984?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxibGFjayUyMHRlYSUyMGN1cHxlbnwxfHx8fDE3Njg2OTQzNDl8MA&ixlib=rb-4.1.0&q=80&w=1080'
-  },
-  {
-    id: 2,
-    name: '黑糖珍珠鮮奶',
-    nameEn: 'Brown Sugar Pearl Milk',
-    description: '手工珍珠 / 古法黑糖 / 鮮乳坊鮮奶',
-    price: '75',
-    category: '經典',
-    image: 'https://images.unsplash.com/photo-1558857563-b371033873b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidWJibGUlMjB0ZWF8ZW58MXx8fHwxNzY4NzU0ODY3fDA&ixlib=rb-4.1.0&q=80&w=1080'
-  },
-  {
-    id: 3,
-    name: '金萱烏龍',
-    nameEn: 'Jin Xuan Oolong',
-    description: '台灣高山 / 奶香四溢 / 回甘悠長',
-    price: '70',
-    category: '純茶',
-    image: 'https://images.unsplash.com/photo-1707578365460-f92c22d18a24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaWxrJTIwdGVhJTIwZHJpbmt8ZW58MXx8fHwxNzY4NzExNDgwfDA&ixlib=rb-4.1.0&q=80&w=1080'
-  },
-  {
-    id: 4,
-    name: '荔枝烏龍氣泡',
-    nameEn: 'Lychee Oolong Sparkling',
-    description: '新鮮荔枝 / 手工氣泡 / 清爽消暑',
-    price: '85',
-    category: '水果',
-    image: 'https://images.unsplash.com/photo-1645467148762-6d7fd24d7acf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmcnVpdCUyMHRlYXxlbnwxfHx8fDE3Njg4MDg4OTN8MA&ixlib=rb-4.1.0&q=80&w=1080'
-  },
-  {
-    id: 5,
-    name: '炭焙鐵觀音',
-    nameEn: 'Charcoal Roasted Tieguanyin',
-    description: '傳統工藝 / 炭火烘焙 / 喉韻深沉',
-    price: '80',
-    category: '特調',
-    image: 'https://images.unsplash.com/photo-1693114812744-ed1b09d05984?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxibGFjayUyMHRlYSUyMGN1cHxlbnwxfHx8fDE3Njg2OTQzNDl8MA&ixlib=rb-4.1.0&q=80&w=1080'
-  },
-  {
-    id: 6,
-    name: '芝芝莓果',
-    nameEn: 'Cheese Berry Tea',
-    description: '新鮮莓果 / 奶蓋芝士 / 層次豐富',
-    price: '90',
-    category: '特調',
-    image: 'https://images.unsplash.com/photo-1645467148762-6d7fd24d7acf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmcnVpdCUyMHRlYXxlbnwxfHx8fDE3Njg4MDg4OTN8MA&ixlib=rb-4.1.0&q=80&w=1080'
-  },
-]
+interface Product {
+  id: string
+  name: string
+  slug: string
+  description: string | null
+  price: number
+  image: string | null
+  category: Category | null
+  tags: string[]
+  isNew: boolean
+  isFeatured: boolean
+}
 
 export function Products() {
   const [activeCategory, setActiveCategory] = useState('全部')
+  const [categories, setCategories] = useState<Category[]>([])
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const [productsRes, categoriesRes] = await Promise.all([
+          fetch('/api/products'),
+          fetch('/api/categories')
+        ])
+
+        if (!productsRes.ok || !categoriesRes.ok) {
+          throw new Error('Failed to fetch data')
+        }
+
+        const productsData = await productsRes.json()
+        const categoriesData = await categoriesRes.json()
+
+        setProducts(productsData)
+        setCategories(categoriesData)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching products:', err)
+        setError(err instanceof Error ? err.message : '載入產品失敗')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  const categoryNames = ['全部', ...categories.map(c => c.name)]
   const filteredProducts = activeCategory === '全部'
     ? products
-    : products.filter(p => p.category === activeCategory)
+    : products.filter(p => p.category?.name === activeCategory)
+
+  if (loading) {
+    return (
+      <section id="products" className="relative py-8 lg:py-16 bg-paper-cream overflow-hidden">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 text-center py-20">
+          <div className="animate-pulse">
+            <div className="h-8 bg-tea-ink/10 rounded w-48 mx-auto mb-4"></div>
+            <div className="h-4 bg-tea-ink/10 rounded w-64 mx-auto"></div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section id="products" className="relative py-8 lg:py-16 bg-paper-cream overflow-hidden">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 text-center py-20">
+          <p className="text-red-600">錯誤：{error}</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section id="products" className="relative py-8 lg:py-16 bg-paper-cream overflow-hidden">
@@ -108,7 +126,7 @@ export function Products() {
           transition={{ delay: 0.2 }}
           className="flex justify-center gap-2 mb-16 flex-wrap"
         >
-          {categories.map((cat) => (
+          {categoryNames.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
@@ -148,7 +166,7 @@ export function Products() {
                   {/* Image Container */}
                   <div className="relative aspect-[4/5] overflow-hidden">
                     <ImageWithFallback
-                      src={product.image}
+                      src={product.image || '/images/placeholder-product.jpg'}
                       alt={product.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -169,16 +187,23 @@ export function Products() {
                     </div>
 
                     {/* Category Badge */}
-                    <div className="absolute top-6 left-6">
-                      <span className="px-3 py-1 bg-silk-white/90 text-tea-ink text-xs tracking-wider">
-                        {product.category}
-                      </span>
+                    <div className="absolute top-6 left-6 flex gap-2">
+                      {product.category && (
+                        <span className="px-3 py-1 bg-silk-white/90 text-tea-ink text-xs tracking-wider">
+                          {product.category.name}
+                        </span>
+                      )}
+                      {product.isNew && (
+                        <span className="px-3 py-1 bg-terracotta text-silk-white text-xs tracking-wider">
+                          新品
+                        </span>
+                      )}
                     </div>
 
                     {/* Bottom Content on Image */}
                     <div className="absolute bottom-0 left-0 right-0 p-6">
                       <div className="text-xs text-silk-white/60 tracking-widest uppercase mb-1">
-                        {product.nameEn}
+                        {product.slug}
                       </div>
                       <h3 className="font-serif text-2xl text-silk-white mb-2">
                         {product.name}
@@ -189,7 +214,7 @@ export function Products() {
                   {/* Content */}
                   <div className="p-6 border-x border-b border-tea-ink/5">
                     <p className="text-stone-gray text-sm mb-6 leading-relaxed">
-                      {product.description}
+                      {product.description || '精選茶品，品質保證'}
                     </p>
 
                     <button className="group/btn w-full relative py-3 border border-tea-ink/20 hover:border-tea-ink transition-colors overflow-hidden">
