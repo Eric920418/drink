@@ -96,7 +96,7 @@ export default function MenuPage() {
       </section>
 
       {/* Menu Section */}
-      <section className="relative py-16 bg-paper-cream">
+      <section className="relative py-6 bg-paper-cream">
         <div className="relative max-w-[1400px] mx-auto px-6 md:px-12">
           {/* Category Filter */}
           <motion.div
@@ -109,7 +109,7 @@ export default function MenuPage() {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`relative px-6 py-3 text-sm tracking-wider transition-all duration-300 ${
+                className={`relative px-6 py-2 text-sm tracking-wider transition-all duration-300 ${
                   activeCategory === cat
                     ? 'text-silk-white'
                     : 'text-stone-gray hover:text-tea-ink'
@@ -129,7 +129,7 @@ export default function MenuPage() {
 
           {/* Loading State */}
           {loading && (
-            <div className="text-center py-20">
+            <div className="text-center py-10">
               <div className="animate-pulse">
                 <div className="h-8 bg-tea-ink/10 rounded w-48 mx-auto mb-4"></div>
                 <div className="h-4 bg-tea-ink/10 rounded w-64 mx-auto"></div>
@@ -139,7 +139,7 @@ export default function MenuPage() {
 
           {/* Error State */}
           {error && (
-            <div className="text-center py-20">
+            <div className="text-center py-10">
               <p className="text-red-600">錯誤：{error}</p>
             </div>
           )}
@@ -224,7 +224,7 @@ export default function MenuPage() {
 
           {/* Empty State */}
           {!loading && !error && filteredProducts.length === 0 && (
-            <div className="text-center py-20">
+            <div className="text-center py-10">
               <p className="text-stone-gray">此分類目前沒有產品</p>
             </div>
           )}

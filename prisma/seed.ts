@@ -316,6 +316,53 @@ async function main() {
         copyright: "© 2026 TeaInn. All rights reserved.",
       },
     },
+    {
+      key: "franchise",
+      payload: {
+        title: "加盟合作",
+        description: "與我們一起傳承茶文化，創造美好事業",
+        benefits: [
+          {
+            icon: "TrendingUp",
+            title: "成熟商業模式",
+            description: "經過市場驗證的營運系統，降低創業風險",
+          },
+          {
+            icon: "Award",
+            title: "完整教育訓練",
+            description: "從茶葉知識到門市管理，全方位培訓支援",
+          },
+          {
+            icon: "Headphones",
+            title: "持續輔導支持",
+            description: "總部專業團隊協助，確保營運順利",
+          },
+        ],
+        steps: [
+          { step: "01", title: "初步洽談", desc: "填寫加盟意願書，進行初步溝通" },
+          { step: "02", title: "資格審核", desc: "總部評估加盟條件與資格" },
+          { step: "03", title: "簽約合作", desc: "雙方確認合作細節並簽訂合約" },
+          { step: "04", title: "店面籌備", desc: "選址評估、裝潢設計與設備採購" },
+          { step: "05", title: "教育訓練", desc: "產品知識與營運管理培訓" },
+          { step: "06", title: "開幕營運", desc: "正式開幕，總部持續輔導支援" },
+        ],
+        conditions: [
+          "認同茶客棧品牌理念與企業文化",
+          "具備良好的服務熱忱與經營態度",
+          "具備一定的資金實力與信用條件",
+          "能親自參與門市經營管理",
+          "配合總部的營運規範與制度",
+        ],
+        investment: [
+          { label: "加盟金", value: "NT$ 300,000" },
+          { label: "保證金", value: "NT$ 200,000" },
+          { label: "設備費用", value: "NT$ 800,000 起" },
+          { label: "裝潢費用", value: "依實際坪數" },
+        ],
+        ctaTitle: "準備好開啟茶事業了嗎？",
+        ctaDescription: "歡迎與我們聯繫，了解更多加盟詳情。我們期待與您一起創造美好的茶文化體驗。",
+      },
+    },
   ];
 
   for (const block of contentBlocks) {
