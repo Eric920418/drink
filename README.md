@@ -10,7 +10,7 @@
 - 品牌形象展示
 - 茶品菜單瀏覽（首頁精選 + `/menu` 完整茶單頁面）
 - 門市據點查詢
-- 活動與促銷資訊
+- 活動專區（`/events` 列表頁 + `/events/[slug]` 詳情頁）
 - 加盟資訊
 - 聯絡表單
 
@@ -125,6 +125,9 @@ pnpm start
 /drink
 ├── app/
 │   ├── menu/                   # 完整茶單頁面
+│   ├── events/                 # 活動專區
+│   │   ├── page.tsx            # 活動列表頁
+│   │   └── [slug]/page.tsx     # 活動詳情頁
 │   ├── admin/                  # CMS 後台頁面
 │   │   ├── login/              # 登入頁面
 │   │   ├── dashboard/          # 儀表板
@@ -210,6 +213,7 @@ pnpm start
 | GET | `/api/categories` | 獲取所有分類 |
 | GET | `/api/stores` | 獲取所有門市 |
 | GET | `/api/events` | 獲取所有活動 |
+| GET | `/api/events/[slug]` | 獲取單一活動詳情 |
 | GET | `/api/content/[key]` | 獲取頁面內容 |
 | POST | `/api/contact` | 提交聯絡表單 |
 

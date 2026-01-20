@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
+import Link from 'next/link'
 import { ImageWithFallback } from './figma/ImageWithFallback'
-import { Calendar, Gift, Users } from 'lucide-react'
+import { Calendar, ArrowRight } from 'lucide-react'
 
 interface Event {
   id: string
   title: string
+  slug: string
   subtitle: string | null
   description: string | null
   image: string | null
@@ -162,9 +164,13 @@ export function Events() {
                     </div>
                   )}
 
-                  <button className="self-start px-8 py-3 border border-tea-sage/30 hover:bg-tea-sage hover:border-tea-sage text-tea-sage hover:text-tea-ink text-sm tracking-wider transition-all">
-                    了解更多
-                  </button>
+                  <Link
+                    href={`/events/${event.slug}`}
+                    className="self-start inline-flex items-center gap-2 px-8 py-3 border border-tea-sage/30 hover:bg-tea-sage hover:border-tea-sage text-tea-sage hover:text-tea-ink text-sm tracking-wider transition-all group"
+                  >
+                    <span>了解更多</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </div>
               </div>
             </motion.div>
