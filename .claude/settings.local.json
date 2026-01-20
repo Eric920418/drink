@@ -15,7 +15,8 @@
       "Bash(npx prisma init)",
       "Bash(npx prisma migrate:*)",
       "Bash(pnpm db:seed:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "WebFetch(domain:ckh2013.com)"
     ]
   }
 }

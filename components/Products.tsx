@@ -216,13 +216,6 @@ export function Products() {
                     <p className="text-stone-gray text-sm mb-6 leading-relaxed">
                       {product.description || '精選茶品，品質保證'}
                     </p>
-
-                    <button className="group/btn w-full relative py-3 border border-tea-ink/20 hover:border-tea-ink transition-colors overflow-hidden">
-                      <span className="relative z-10 text-tea-ink text-sm tracking-wider group-hover/btn:text-silk-white transition-colors duration-300">
-                        立即選購
-                      </span>
-                      <div className="absolute inset-0 bg-tea-ink translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
-                    </button>
                   </div>
 
                   {/* Corner Decoration */}
@@ -242,7 +235,7 @@ export function Products() {
           className="text-center mt-16"
         >
           <a
-            href="#"
+            href="/menu"
             className="group inline-flex items-center gap-4 text-tea-ink hover:text-terracotta transition-colors"
           >
             <span className="text-sm tracking-widest">瀏覽完整茶單</span>
