@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Plus, Edit, Trash2, MapPin, Clock, Phone } from "lucide-react";
+import ImageUploader from "@/components/admin/ImageUploader";
 
 interface Store {
   id: number;
@@ -375,15 +376,11 @@ export default function StoresPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    圖片 URL
+                    門市圖片
                   </label>
-                  <input
-                    type="text"
+                  <ImageUploader
                     value={formData.image}
-                    onChange={(e) =>
-                      setFormData({ ...formData, image: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c9a227] focus:border-transparent outline-none"
+                    onChange={(url) => setFormData({ ...formData, image: url })}
                   />
                 </div>
 

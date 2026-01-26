@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Plus, Edit, Trash2, Search, Filter } from "lucide-react";
+import ImageUploader from "@/components/admin/ImageUploader";
 
 interface Category {
   id: number;
@@ -420,16 +421,11 @@ export default function ProductsPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    圖片 URL
+                    產品圖片
                   </label>
-                  <input
-                    type="text"
+                  <ImageUploader
                     value={formData.image}
-                    onChange={(e) =>
-                      setFormData({ ...formData, image: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c9a227] focus:border-transparent outline-none"
-                    placeholder="輸入圖片 URL 或使用上傳功能"
+                    onChange={(url) => setFormData({ ...formData, image: url })}
                   />
                 </div>
 
