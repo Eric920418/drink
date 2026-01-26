@@ -286,6 +286,7 @@ pnpm db:studio    # 開啟 Prisma Studio
 ## 已知限制與待完成功能
 
 ### 前台功能
+- **導覽連結**：已修正為絕對路徑（`/#about` 而非 `#about`），可從任何子頁面正確跳轉到首頁對應區塊
 - **社群連結**：目前連結至預設的 Instagram/Facebook 頁面（teainn.tw），需在上線前更新為實際社群連結
 - **加盟說明書**：點擊後會顯示提示訊息，需上傳實際 PDF 文件至 `/public/files/franchise-guide.pdf`
 - **門市地圖/線上訂購**：需在後台為各門市設定 `mapUrl` 和 `orderUrl`，否則會顯示提示訊息

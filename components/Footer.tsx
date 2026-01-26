@@ -122,14 +122,20 @@ export function Footer() {
           <div className="lg:col-span-3">
             <h3 className="font-serif text-silk-white text-lg mb-6">導覽</h3>
             <ul className="space-y-3">
-              {['關於我們', '經典飲品', '活動專區', '加盟資訊', '門市據點'].map((item) => (
-                <li key={item}>
+              {[
+                { label: '關於我們', href: '/#about' },
+                { label: '經典飲品', href: '/#products' },
+                { label: '活動專區', href: '/#events' },
+                { label: '加盟資訊', href: '/#franchise' },
+                { label: '門市據點', href: '/#stores' },
+              ].map((item) => (
+                <li key={item.label}>
                   <a
-                    href={`#${item === '關於我們' ? 'about' : item === '經典飲品' ? 'products' : item === '活動專區' ? 'events' : item === '加盟資訊' ? 'franchise' : 'stores'}`}
+                    href={item.href}
                     className="text-silk-white/50 hover:text-tea-sage text-sm transition-colors inline-flex items-center gap-2 group"
                   >
                     <span className="w-0 h-px bg-tea-sage group-hover:w-3 transition-all"></span>
-                    {item}
+                    {item.label}
                   </a>
                 </li>
               ))}
