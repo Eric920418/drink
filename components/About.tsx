@@ -1,11 +1,52 @@
 'use client'
 
 import { motion, useScroll, useTransform } from 'motion/react'
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { ImageWithFallback } from './figma/ImageWithFallback'
+
+interface AboutData {
+  title: string
+  description: string
+  description2: string
+  image: string
+  quote: string
+  stats: Array<{ number: string; label: string }>
+}
+
+const defaultData: AboutData = {
+  title: '茶的哲學',
+  description: '在快速的都市節奏中，我們選擇慢下來。每一片茶葉的挑選，每一次沖泡的溫度，都是對傳統的致敬，對品質的堅持。',
+  description2: '從清晨的茶園到黃昏的茶室，茶客棧始終相信，一杯好茶不僅是飲品，更是一種生活態度。我們走訪台灣各地茶區，與茶農建立深厚情誼，只為找到最純粹的茶香。',
+  image: 'https://images.unsplash.com/photo-1602943543714-cf535b048440?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWElMjBsZWF2ZXN8ZW58MXx8fHwxNzY4Nzc5NTI4fDA&ixlib=rb-4.1.0&q=80&w=1080',
+  quote: '一期一會，珍惜每一杯茶的相遇',
+  stats: [
+    { number: '500+', label: '每日新鮮茶飲' },
+    { number: '15+', label: '直營門市據點' },
+    { number: '98%', label: '顧客滿意度' },
+  ]
+}
 
 export function About() {
   const sectionRef = useRef<HTMLDivElement>(null)
+  const [data, setData] = useState<AboutData>(defaultData)
+
+  useEffect(() => {
+    fetch('/api/content/about')
+      .then(res => res.ok ? res.json() : null)
+      .then(payload => {
+        if (payload) {
+          setData({
+            title: payload.title || defaultData.title,
+            description: payload.description || defaultData.description,
+            description2: payload.description2 || defaultData.description2,
+            image: payload.image || defaultData.image,
+            quote: payload.quote || defaultData.quote,
+            stats: Array.isArray(payload.stats) ? payload.stats : defaultData.stats,
+          })
+        }
+      })
+      .catch(err => console.error('Failed to fetch about data:', err))
+  }, [])
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"]
@@ -45,7 +86,7 @@ export function About() {
                 className="relative aspect-[4/5] overflow-hidden"
               >
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1602943543714-cf535b048440?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWElMjBsZWF2ZXN8ZW58MXx8fHwxNzY4Nzc5NTI4fDA&ixlib=rb-4.1.0&q=80&w=1080"
+                  src={data.image}
                   alt="茶葉製作"
                   fill
                   className="object-cover"
@@ -69,7 +110,7 @@ export function About() {
                 <div className="relative">
                   <span className="absolute -top-4 -left-2 text-terracotta text-4xl font-serif">&ldquo;</span>
                   <p className="font-serif text-silk-white text-lg leading-relaxed pl-4">
-                    一期一會，<br/>珍惜每一杯茶的相遇
+                    {data.quote}
                   </p>
                   <div className="mt-4 pt-4 border-t border-silk-white/10">
                     <span className="text-tea-sage text-xs tracking-widest">茶道精神</span>
@@ -101,27 +142,22 @@ export function About() {
 
             {/* 主標題 */}
             <h2 className="font-serif text-5xl lg:text-6xl text-tea-ink mb-8 leading-tight">
-              茶的
-              <span className="text-tea-jade">哲學</span>
+              {data.title}
             </h2>
 
             {/* 內文 */}
             <div className="space-y-6 text-stone-gray leading-relaxed mb-12">
               <p className="text-lg">
-                在快速的都市節奏中，我們選擇慢下來。每一片茶葉的挑選，每一次沖泡的溫度，都是對傳統的致敬，對品質的堅持。
+                {data.description}
               </p>
               <p>
-                從清晨的茶園到黃昏的茶室，茶客棧始終相信，一杯好茶不僅是飲品，更是一種生活態度。我們走訪台灣各地茶區，與茶農建立深厚情誼，只為找到最純粹的茶香。
+                {data.description2}
               </p>
             </div>
 
             {/* 數據展示 */}
             <div className="grid grid-cols-3 gap-8 pt-8 border-t border-tea-ink/10">
-              {[
-                { number: '500+', label: '每日新鮮茶飲' },
-                { number: '15+', label: '直營門市據點' },
-                { number: '98%', label: '顧客滿意度' },
-              ].map((stat, index) => (
+              {data.stats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 20 }}

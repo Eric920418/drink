@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+// 禁用緩存，確保每次都獲取最新數據
+export const dynamic = 'force-dynamic';
+
 // 獲取所有分類（公開 API）
 export async function GET() {
   try {

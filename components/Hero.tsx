@@ -1,11 +1,61 @@
 'use client'
 
 import { motion, useScroll, useTransform } from 'motion/react'
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
+
+interface HeroData {
+  title: string
+  subtitle: string
+  tagline1: string
+  tagline2: string
+  description: string
+  backgroundImage: string
+  ctaText: string
+  ctaLink: string
+  stats: Array<{ number: string; label: string; sublabel: string }>
+}
+
+const defaultData: HeroData = {
+  title: '茶客棧',
+  subtitle: 'Since 2020 - Taiwan',
+  tagline1: '尋常品茗',
+  tagline2: '不尋常的堅持',
+  description: '在快節奏的都市中，為您保留一方寧靜的茶香天地。',
+  backgroundImage: '/images/hero-bg.png',
+  ctaText: '探索茶單',
+  ctaLink: '#products',
+  stats: [
+    { number: '15+', label: '直營門市', sublabel: 'Stores' },
+    { number: '30+', label: '精選茶品', sublabel: 'Products' },
+    { number: '6', label: '年品牌歷史', sublabel: 'Years' },
+  ]
+}
 
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [data, setData] = useState<HeroData>(defaultData)
+
+  useEffect(() => {
+    fetch('/api/content/hero')
+      .then(res => res.ok ? res.json() : null)
+      .then(payload => {
+        if (payload) {
+          setData({
+            title: payload.title || defaultData.title,
+            subtitle: payload.subtitle || defaultData.subtitle,
+            tagline1: payload.tagline1 || defaultData.tagline1,
+            tagline2: payload.tagline2 || defaultData.tagline2,
+            description: payload.description || defaultData.description,
+            backgroundImage: payload.backgroundImage || defaultData.backgroundImage,
+            ctaText: payload.ctaText || defaultData.ctaText,
+            ctaLink: payload.ctaLink || defaultData.ctaLink,
+            stats: Array.isArray(payload.stats) ? payload.stats : defaultData.stats,
+          })
+        }
+      })
+      .catch(err => console.error('Failed to fetch hero data:', err))
+  }, [])
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
@@ -27,7 +77,7 @@ export function Hero() {
         className="absolute inset-0"
       >
         <Image
-          src="/images/hero-bg.png"
+          src={data.backgroundImage}
           alt="Tea"
           fill
           className="object-cover opacity-40"
@@ -107,7 +157,7 @@ export function Hero() {
               >
                 <div className="h-px w-16 bg-gradient-to-r from-terracotta to-transparent"></div>
                 <span className="text-terracotta text-xs tracking-[0.4em] uppercase font-light">
-                  Since 2020 - Taiwan
+                  {data.subtitle}
                 </span>
               </motion.div>
 
@@ -120,13 +170,13 @@ export function Hero() {
               >
                 <h1 className="font-serif leading-[0.9] tracking-tight">
                   <span className="block text-[clamp(4rem,12vw,9rem)] text-silk-white">
-                    茶客棧
+                    {data.title}
                   </span>
                   <span className="block text-[clamp(2rem,5vw,3.5rem)] text-tea-sage/80 mt-2">
-                    尋常品茗
+                    {data.tagline1}
                   </span>
                   <span className="block text-[clamp(2rem,5vw,3.5rem)] text-transparent bg-clip-text bg-gradient-to-r from-terracotta via-rust-copper to-terracotta">
-                    不尋常的堅持
+                    {data.tagline2}
                   </span>
                 </h1>
 
@@ -152,9 +202,7 @@ export function Hero() {
                 className="max-w-lg mb-8"
               >
                 <p className="text-silk-white/60 text-lg leading-relaxed">
-                  在快節奏的都市中，為您保留一方寧靜的茶香天地。
-                  <span className="text-tea-sage">堅持古法炮製</span>，
-                  <span className="text-tea-sage">精選台灣茶葉</span>。
+                  {data.description}
                 </p>
               </motion.div>
 
@@ -166,10 +214,10 @@ export function Hero() {
                 className="flex flex-wrap gap-4"
               >
                 <a
-                  href="#products"
+                  href={data.ctaLink}
                   className="group relative inline-flex items-center gap-3 px-8 py-4 bg-terracotta text-silk-white overflow-hidden"
                 >
-                  <span className="relative z-10 text-sm tracking-widest">探索茶單</span>
+                  <span className="relative z-10 text-sm tracking-widest">{data.ctaText}</span>
                   <svg
                     className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform"
                     fill="none"
@@ -204,11 +252,7 @@ export function Hero() {
                 <div className="absolute -bottom-8 -right-8 w-24 h-24 border-b border-r border-tea-sage/20"></div>
 
                 <div className="space-y-8 p-8">
-                  {[
-                    { number: '15+', label: '直營門市', sublabel: 'Stores' },
-                    { number: '30+', label: '精選茶品', sublabel: 'Products' },
-                    { number: '6', label: '年品牌歷史', sublabel: 'Years' },
-                  ].map((stat, index) => (
+                  {data.stats.map((stat, index) => (
                     <motion.div
                       key={stat.label}
                       initial={{ opacity: 0, x: 20 }}

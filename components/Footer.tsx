@@ -1,9 +1,31 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 import { Instagram, Facebook, Mail, MapPin, Phone, Clock, X } from 'lucide-react'
 import Image from 'next/image'
+
+interface FooterData {
+  description: string
+  instagram: string
+  facebook: string
+  email: string
+  phone: string
+  address: string
+  businessHours: string
+  copyright: string
+}
+
+const defaultData: FooterData = {
+  description: '在快節奏的都市中，提供一處靜心品茗的所在。讓每一口茶湯，都成為生活中的美好時刻。',
+  instagram: 'https://instagram.com/teainn.tw',
+  facebook: 'https://facebook.com/teainn.tw',
+  email: 'hello@teainn.tw',
+  phone: '0800-TEA-TIME',
+  address: '台北市大安區茶香路 88 號',
+  businessHours: '10:00 - 22:00',
+  copyright: '茶客棧 TeaInn'
+}
 
 // 隱私政策內容
 const privacyContent = `
@@ -66,6 +88,27 @@ const termsContent = `
 export function Footer() {
   const currentYear = new Date().getFullYear()
   const [showModal, setShowModal] = useState<'privacy' | 'terms' | null>(null)
+  const [data, setData] = useState<FooterData>(defaultData)
+
+  useEffect(() => {
+    fetch('/api/content/footer')
+      .then(res => res.ok ? res.json() : null)
+      .then(payload => {
+        if (payload) {
+          setData({
+            description: payload.description || defaultData.description,
+            instagram: payload.instagram || defaultData.instagram,
+            facebook: payload.facebook || defaultData.facebook,
+            email: payload.email || defaultData.email,
+            phone: payload.phone || defaultData.phone,
+            address: payload.address || defaultData.address,
+            businessHours: payload.businessHours || defaultData.businessHours,
+            copyright: payload.copyright || defaultData.copyright,
+          })
+        }
+      })
+      .catch(err => console.error('Failed to fetch footer data:', err))
+  }, [])
 
   return (
     <footer className="relative bg-tea-ink overflow-hidden">
@@ -93,15 +136,15 @@ export function Footer() {
             </div>
 
             <p className="text-silk-white/50 leading-relaxed mb-8 max-w-md">
-              在快節奏的都市中，提供一處靜心品茗的所在。讓每一口茶湯，都成為生活中的美好時刻。
+              {data.description}
             </p>
 
             {/* Social Links */}
             <div className="flex gap-3">
               {[
-                { icon: Instagram, label: 'Instagram', url: 'https://instagram.com/teainn.tw' },
-                { icon: Facebook, label: 'Facebook', url: 'https://facebook.com/teainn.tw' },
-                { icon: Mail, label: 'Email', url: 'mailto:hello@teainn.tw' },
+                { icon: Instagram, label: 'Instagram', url: data.instagram },
+                { icon: Facebook, label: 'Facebook', url: data.facebook },
+                { icon: Mail, label: 'Email', url: `mailto:${data.email}` },
               ].map(({ icon: Icon, label, url }) => (
                 <motion.a
                   key={label}
@@ -150,28 +193,28 @@ export function Footer() {
                 <Phone className="w-4 h-4 text-terracotta mt-0.5 flex-shrink-0" />
                 <div>
                   <span className="text-silk-white/40 text-xs block mb-1">客服專線</span>
-                  <span className="text-silk-white text-sm">0800-TEA-TIME</span>
+                  <span className="text-silk-white text-sm">{data.phone}</span>
                 </div>
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="w-4 h-4 text-terracotta mt-0.5 flex-shrink-0" />
                 <div>
                   <span className="text-silk-white/40 text-xs block mb-1">電子信箱</span>
-                  <span className="text-silk-white text-sm">hello@teainn.tw</span>
+                  <span className="text-silk-white text-sm">{data.email}</span>
                 </div>
               </li>
               <li className="flex items-start gap-3">
                 <Clock className="w-4 h-4 text-terracotta mt-0.5 flex-shrink-0" />
                 <div>
                   <span className="text-silk-white/40 text-xs block mb-1">營業時間</span>
-                  <span className="text-silk-white text-sm">10:00 - 22:00</span>
+                  <span className="text-silk-white text-sm">{data.businessHours}</span>
                 </div>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-terracotta mt-0.5 flex-shrink-0" />
                 <div>
                   <span className="text-silk-white/40 text-xs block mb-1">總部地址</span>
-                  <span className="text-silk-white text-sm">台北市大安區茶香路 88 號</span>
+                  <span className="text-silk-white text-sm">{data.address}</span>
                 </div>
               </li>
             </ul>
@@ -185,7 +228,7 @@ export function Footer() {
         {/* 底部版權 */}
         <div className="py-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-silk-white/30 text-sm">
-            &copy; {currentYear} 茶客棧 TeaInn. All rights reserved.
+            &copy; {currentYear} {data.copyright}. All rights reserved.
           </p>
 
           <div className="flex gap-8 text-sm">

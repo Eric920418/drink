@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 import { Mail, Phone, MapPin, Clock, Loader2, CheckCircle } from 'lucide-react'
 
@@ -12,7 +12,47 @@ interface FormData {
   message: string
 }
 
+interface ContactData {
+  phone: string
+  phone2: string
+  email: string
+  email2: string
+  address: string
+  businessHours: string
+  businessHours2: string
+}
+
+const defaultContactData: ContactData = {
+  phone: '0800-TEA-TIME',
+  phone2: '(02) 2345-6789',
+  email: 'hello@teainn.tw',
+  email2: 'franchise@teainn.tw (加盟)',
+  address: '台北市信義區信義路五段7號12樓',
+  businessHours: '週一至週五 09:00 - 18:00',
+  businessHours2: '週六、日及國定假日休息'
+}
+
 export function Contact() {
+  const [contactData, setContactData] = useState<ContactData>(defaultContactData)
+
+  useEffect(() => {
+    fetch('/api/content/contact')
+      .then(res => res.ok ? res.json() : null)
+      .then(payload => {
+        if (payload) {
+          setContactData({
+            phone: payload.phone || defaultContactData.phone,
+            phone2: payload.phone2 || defaultContactData.phone2,
+            email: payload.email || defaultContactData.email,
+            email2: payload.email2 || defaultContactData.email2,
+            address: payload.address || defaultContactData.address,
+            businessHours: payload.businessHours || defaultContactData.businessHours,
+            businessHours2: payload.businessHours2 || defaultContactData.businessHours2,
+          })
+        }
+      })
+      .catch(err => console.error('Failed to fetch contact data:', err))
+  }, [])
   const [formData, setFormData] = useState<FormData>({
     name: '',
     phone: '',
@@ -95,22 +135,22 @@ export function Contact() {
                 {
                   icon: Phone,
                   title: '客服專線',
-                  lines: ['0800-TEA-TIME', '(02) 2345-6789']
+                  lines: [contactData.phone, contactData.phone2].filter(Boolean)
                 },
                 {
                   icon: Mail,
                   title: '電子信箱',
-                  lines: ['hello@teainn.tw', 'franchise@teainn.tw (加盟)']
+                  lines: [contactData.email, contactData.email2].filter(Boolean)
                 },
                 {
                   icon: MapPin,
                   title: '總部地址',
-                  lines: ['台北市信義區信義路五段7號12樓']
+                  lines: [contactData.address].filter(Boolean)
                 },
                 {
                   icon: Clock,
                   title: '服務時間',
-                  lines: ['週一至週五 09:00 - 18:00', '週六、日及國定假日休息']
+                  lines: [contactData.businessHours, contactData.businessHours2].filter(Boolean)
                 }
               ].map(({ icon: Icon, title, lines }) => (
                 <div key={title} className="flex items-start gap-5 group">

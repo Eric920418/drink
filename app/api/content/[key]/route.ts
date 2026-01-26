@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+// 禁用緩存，確保每次都獲取最新數據
+export const dynamic = 'force-dynamic';
+
 type RouteParams = { params: Promise<{ key: string }> };
 
 // 獲取單個內容區塊（公開 API）

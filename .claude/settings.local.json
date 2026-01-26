@@ -19,7 +19,8 @@
       "WebFetch(domain:ckh2013.com)",
       "Bash(tree:*)",
       "Bash(npx prisma:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(pnpm tsc:*)"
     ]
   }
 }
