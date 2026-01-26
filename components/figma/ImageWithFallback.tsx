@@ -3,26 +3,6 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 
-// 品牌風格的佔位圖 - 茶葉圖案配合品牌色
-const PLACEHOLDER_SVG = `
-<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#2F090C;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#4a1518;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <rect fill="url(#bg)" width="400" height="300"/>
-  <g transform="translate(150, 100)" fill="#c9a227" opacity="0.3">
-    <path d="M50,0 C70,20 80,50 50,80 C20,50 30,20 50,0 Z"/>
-    <path d="M50,80 L50,120" stroke="#c9a227" stroke-width="2"/>
-  </g>
-  <text x="200" y="180" font-family="serif" font-size="16" fill="#8c4a4a" text-anchor="middle">茶客棧</text>
-</svg>
-`
-
-const ERROR_IMG_SRC = `data:image/svg+xml;base64,${btoa(PLACEHOLDER_SVG)}`
-
 interface ImageWithFallbackProps {
   src: string
   alt: string
