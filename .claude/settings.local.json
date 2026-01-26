@@ -20,7 +20,10 @@
       "Bash(tree:*)",
       "Bash(npx prisma:*)",
       "Bash(npx tsc:*)",
-      "Bash(pnpm tsc:*)"
+      "Bash(pnpm tsc:*)",
+      "Bash(pnpm prisma migrate dev:*)",
+      "Bash(psql:*)",
+      "Bash(pnpm prisma generate:*)"
     ]
   }
 }

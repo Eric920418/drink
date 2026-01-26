@@ -19,7 +19,6 @@
 - **分類管理**：管理產品分類
 - **門市管理**：管理門市據點資訊（地址、營業時間、地圖連結、線上訂購連結）
 - **活動管理**：管理活動與促銷
-- **促銷管理**：管理首頁促銷橫幅
 - **加盟方案**：管理加盟方案（投資金額、方案特色、包含項目）
 - **頁面內容**：編輯首頁各區塊內容（Hero、關於、加盟、聯絡、頁尾），前台實時同步更新
 - **聯絡訊息**：查看和管理客戶聯絡訊息
@@ -136,7 +135,6 @@ pnpm start
 │   │   ├── categories/         # 分類管理
 │   │   ├── stores/             # 門市管理
 │   │   ├── events/             # 活動管理
-│   │   ├── promotions/         # 促銷管理
 │   │   ├── content/            # 頁面內容
 │   │   ├── messages/           # 聯絡訊息
 │   │   └── settings/           # 網站設定
@@ -146,7 +144,6 @@ pnpm start
 │   │   │   ├── categories/
 │   │   │   ├── stores/
 │   │   │   ├── events/
-│   │   │   ├── promotions/
 │   │   │   ├── content-blocks/
 │   │   │   ├── contact-messages/
 │   │   │   ├── settings/
@@ -199,7 +196,6 @@ pnpm start
 - **ProductTopping** - 加料選項
 - **Store** - 門市據點
 - **Event** - 活動
-- **Promotion** - 促銷優惠
 - **ContentBlock** - 頁面內容區塊（hero、about、franchise、contact、footer）
 - **ContactMessage** - 聯絡訊息
 - **SiteSetting** - 網站設定
@@ -230,8 +226,6 @@ pnpm start
 | GET/PUT/DELETE | `/api/admin/stores/[id]` | 門市詳情/更新/刪除 |
 | GET/POST | `/api/admin/events` | 活動列表/新增 |
 | GET/PUT/DELETE | `/api/admin/events/[id]` | 活動詳情/更新/刪除 |
-| GET/POST | `/api/admin/promotions` | 促銷列表/新增 |
-| GET/PUT/DELETE | `/api/admin/promotions/[id]` | 促銷詳情/更新/刪除 |
 | GET/POST | `/api/admin/content-blocks` | 內容區塊列表/新增 |
 | GET/PUT/DELETE | `/api/admin/content-blocks/[key]` | 內容區塊詳情/更新/刪除 |
 | GET | `/api/admin/contact-messages` | 聯絡訊息列表 |
@@ -287,7 +281,7 @@ pnpm db:studio    # 開啟 Prisma Studio
 ## 已知限制與待完成功能
 
 ### 前台功能
-- **導覽連結**：已修正為絕對路徑（`/#about` 而非 `#about`），可從任何子頁面正確跳轉到首頁對應區塊
+- **導覽連結**：茶單、活動、加盟、門市導航至獨立頁面（`/menu`、`/events`、`/franchise`、`/stores`）；關於、聯絡使用絕對路徑錨點（`/#about`、`/#contact`）跳轉至首頁對應區塊
 - **社群連結**：目前連結至預設的 Instagram/Facebook 頁面（teainn.tw），需在上線前更新為實際社群連結
 - **加盟說明書**：點擊後會顯示提示訊息，需上傳實際 PDF 文件至 `/public/files/franchise-guide.pdf`
 - **門市地圖/線上訂購**：需在後台為各門市設定 `mapUrl` 和 `orderUrl`，否則會顯示提示訊息

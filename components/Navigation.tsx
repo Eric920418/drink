@@ -15,12 +15,12 @@ export function Navigation() {
   }, [])
 
   const navItems = [
-    { name: '關於', href: '#about' },
-    { name: '茶單', href: '#products' },
-    { name: '活動', href: '#events' },
-    { name: '加盟', href: '#franchise' },
-    { name: '門市', href: '#stores' },
-    { name: '聯絡', href: '#contact' },
+    { name: '關於', href: '/#about' },
+    { name: '茶單', href: '/menu' },
+    { name: '活動', href: '/events' },
+    { name: '加盟', href: '/franchise' },
+    { name: '門市', href: '/stores' },
+    { name: '聯絡', href: '/#contact' },
   ]
 
   return (
@@ -81,7 +81,7 @@ export function Navigation() {
                 scrolled ? 'border-tea-ink/20' : 'border-silk-white/30'
               }`}>
                 <a
-                  href="#contact"
+                  href="/#contact"
                   className={`inline-flex items-center gap-2 px-5 py-2 text-sm tracking-wider transition-all duration-300 ${
                     scrolled
                       ? 'bg-tea-ink text-silk-white hover:bg-tea-forest'

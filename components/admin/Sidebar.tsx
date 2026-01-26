@@ -9,7 +9,6 @@ import {
   Tags,
   Store,
   Calendar,
-  Gift,
   FileText,
   MessageSquare,
   Settings,
@@ -46,11 +45,6 @@ const menuItems = [
     title: "活動管理",
     href: "/admin/events",
     icon: Calendar,
-  },
-  {
-    title: "促銷管理",
-    href: "/admin/promotions",
-    icon: Gift,
   },
   {
     title: "加盟方案",

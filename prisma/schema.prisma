@@ -138,21 +138,6 @@ model Event {
 }
 
 // ============================================
-// 促銷優惠（首頁橫幅）
-// ============================================
-model Promotion {
-  id          Int      @id @default(autoincrement())
-  title       String   // 優惠標題
-  description String?  // 優惠描述
-  icon        String?  // 圖標名稱
-  link        String?  // 連結
-  isActive    Boolean  @default(true)
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-// ============================================
 // 頁面內容區塊（用於 Hero、About、Contact 等）
 // ============================================
 model ContentBlock {

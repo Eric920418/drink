@@ -218,38 +218,6 @@ async function main() {
   }
   console.log("Events created");
 
-  // 創建促銷
-  const promotions = [
-    {
-      title: "新會員禮",
-      description: "首次註冊送50元折價券",
-      icon: "gift",
-    },
-    {
-      title: "好友分享",
-      description: "推薦好友各得100元",
-      icon: "users",
-    },
-    {
-      title: "生日禮",
-      description: "生日當月享免費升級",
-      icon: "cake",
-    },
-  ];
-
-  for (let i = 0; i < promotions.length; i++) {
-    const promotion = promotions[i];
-    await prisma.promotion.upsert({
-      where: { id: i + 1 },
-      update: {},
-      create: {
-        ...promotion,
-        order: i + 1,
-      },
-    });
-  }
-  console.log("Promotions created");
-
   // 創建網站設定
   const settings = {
     siteName: "茶客棧 TeaInn",
