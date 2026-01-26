@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { checkAdminAuth, errorResponse, successResponse } from "@/lib/api-auth";
+import { nanoid } from "nanoid";
 
 // 獲取所有產品
 export async function GET(request: NextRequest) {
@@ -42,7 +43,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       name,
-      slug,
       description,
       price,
       image,
@@ -57,9 +57,12 @@ export async function POST(request: NextRequest) {
       tags,
     } = body;
 
-    if (!name || !slug || !price || !categoryId) {
-      return errorResponse("名稱、slug、價格和分類為必填", 400);
+    if (!name || !price || !categoryId) {
+      return errorResponse("名稱、價格和分類為必填", 400);
     }
+
+    // 自動生成隨機 slug
+    const slug = nanoid(10);
 
     const product = await prisma.product.create({
       data: {

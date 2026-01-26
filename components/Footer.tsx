@@ -124,10 +124,10 @@ export function Footer() {
             <ul className="space-y-3">
               {[
                 { label: '關於我們', href: '/#about' },
-                { label: '經典飲品', href: '/#products' },
-                { label: '活動專區', href: '/#events' },
-                { label: '加盟資訊', href: '/#franchise' },
-                { label: '門市據點', href: '/#stores' },
+                { label: '經典飲品', href: '/menu' },
+                { label: '活動專區', href: '/events' },
+                { label: '加盟資訊', href: '/franchise' },
+                { label: '門市據點', href: '/stores' },
               ].map((item) => (
                 <li key={item.label}>
                   <a

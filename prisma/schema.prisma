@@ -164,6 +164,26 @@ model ContentBlock {
 }
 
 // ============================================
+// 加盟方案
+// ============================================
+model FranchisePlan {
+  id          Int      @id @default(autoincrement())
+  name        String   // 方案名稱：標準店、旗艦店等
+  slug        String   @unique
+  description String?  // 方案描述
+  image       String?  // 方案圖片
+  investment  String   // 投資金額範圍
+  area        String?  // 建議坪數
+  features    String[] // 方案特色
+  includes    String[] // 方案包含項目
+  isPopular   Boolean  @default(false) // 是否為熱門方案
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
 // 聯絡訊息
 // ============================================
 model ContactMessage {

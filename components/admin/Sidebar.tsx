@@ -17,6 +17,7 @@ import {
   Coffee,
   ChevronLeft,
   ChevronRight,
+  Handshake,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -50,6 +51,11 @@ const menuItems = [
     title: "促銷管理",
     href: "/admin/promotions",
     icon: Gift,
+  },
+  {
+    title: "加盟方案",
+    href: "/admin/franchise-plans",
+    icon: Handshake,
   },
   {
     title: "頁面內容",

@@ -39,7 +39,6 @@ export default function ProductsPage() {
   // 表單狀態
   const [formData, setFormData] = useState({
     name: "",
-    slug: "",
     description: "",
     price: "",
     image: "",
@@ -137,7 +136,6 @@ export default function ProductsPage() {
   const resetForm = () => {
     setFormData({
       name: "",
-      slug: "",
       description: "",
       price: "",
       image: "",
@@ -158,7 +156,6 @@ export default function ProductsPage() {
     setEditingProduct(product);
     setFormData({
       name: product.name,
-      slug: product.slug,
       description: product.description || "",
       price: product.price.toString(),
       image: product.image || "",
@@ -175,17 +172,10 @@ export default function ProductsPage() {
     setShowModal(true);
   };
 
-  const generateSlug = (name: string) => {
-    return name
-      .toLowerCase()
-      .replace(/[^\w\u4e00-\u9fa5]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  };
-
   const filteredProducts = products.filter((product) => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.slug.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = product.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
     const matchesCategory =
       filterCategory === "" || product.categoryId === filterCategory;
     return matchesSearch && matchesCategory;
@@ -361,39 +351,19 @@ export default function ProductsPage() {
               </div>
 
               <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      產品名稱 *
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.name}
-                      onChange={(e) => {
-                        setFormData({
-                          ...formData,
-                          name: e.target.value,
-                          slug: generateSlug(e.target.value),
-                        });
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c9a227] focus:border-transparent outline-none"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Slug *
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.slug}
-                      onChange={(e) =>
-                        setFormData({ ...formData, slug: e.target.value })
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c9a227] focus:border-transparent outline-none"
-                      required
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    產品名稱 *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c9a227] focus:border-transparent outline-none"
+                    required
+                  />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
