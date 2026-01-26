@@ -1,11 +1,71 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'motion/react'
-import { Instagram, Facebook, Mail, MapPin, Phone, Clock } from 'lucide-react'
+import { Instagram, Facebook, Mail, MapPin, Phone, Clock, X } from 'lucide-react'
 import Image from 'next/image'
+
+// 隱私政策內容
+const privacyContent = `
+茶客棧（以下稱「本公司」）非常重視您的隱私權，特訂定本隱私權政策：
+
+一、個人資料的蒐集
+本公司透過網站蒐集您的姓名、電話、電子郵件等資料，用於回覆您的諮詢及提供相關服務。
+
+二、個人資料的利用
+您的個人資料僅用於：
+• 回覆您的聯絡諮詢
+• 寄送活動資訊與優惠通知（經您同意）
+• 改善我們的服務品質
+
+三、資料保護
+本公司採取適當的安全措施保護您的個人資料，防止未經授權的存取、揭露或毀損。
+
+四、第三方揭露
+除法律要求外，本公司不會將您的個人資料提供給第三方。
+
+五、Cookie 使用
+本網站使用 Cookie 以提升您的瀏覽體驗，您可透過瀏覽器設定管理 Cookie。
+
+六、聯絡方式
+如有任何隱私權相關問題，請聯絡：hello@teainn.tw
+`
+
+const termsContent = `
+歡迎使用茶客棧網站，請詳閱以下服務條款：
+
+一、服務內容
+本網站提供茶客棧品牌資訊、產品介紹、門市資訊、加盟資訊及聯絡服務。
+
+二、智慧財產權
+本網站所有內容，包括但不限於文字、圖片、標誌、設計，均屬本公司所有，未經授權不得使用。
+
+三、使用規範
+使用本網站時，您同意：
+• 不得從事任何違法行為
+• 不得干擾網站正常運作
+• 不得冒用他人身分
+
+四、免責聲明
+• 本網站資訊僅供參考，實際產品以門市為準
+• 本公司保留隨時修改網站內容的權利
+• 因不可抗力因素造成的服務中斷，本公司不負賠償責任
+
+五、連結網站
+本網站可能包含第三方網站連結，本公司不對其內容負責。
+
+六、條款修改
+本公司保留隨時修改本條款的權利，修改後將公告於本網站。
+
+七、準據法
+本條款以中華民國法律為準據法。
+
+最後更新：2024 年 1 月
+`
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
+  const [showModal, setShowModal] = useState<'privacy' | 'terms' | null>(null)
 
   return (
     <footer className="relative bg-tea-ink overflow-hidden">
@@ -39,13 +99,15 @@ export function Footer() {
             {/* Social Links */}
             <div className="flex gap-3">
               {[
-                { icon: Instagram, label: 'Instagram' },
-                { icon: Facebook, label: 'Facebook' },
-                { icon: Mail, label: 'Email' },
-              ].map(({ icon: Icon, label }) => (
+                { icon: Instagram, label: 'Instagram', url: 'https://instagram.com/teainn.tw' },
+                { icon: Facebook, label: 'Facebook', url: 'https://facebook.com/teainn.tw' },
+                { icon: Mail, label: 'Email', url: 'mailto:hello@teainn.tw' },
+              ].map(({ icon: Icon, label, url }) => (
                 <motion.a
                   key={label}
-                  href="#"
+                  href={url}
+                  target={url.startsWith('mailto') ? undefined : '_blank'}
+                  rel={url.startsWith('mailto') ? undefined : 'noopener noreferrer'}
                   whileHover={{ y: -2 }}
                   className="group w-10 h-10 border border-silk-white/10 hover:border-terracotta/50 hover:bg-terracotta/10 flex items-center justify-center transition-all"
                   aria-label={label}
@@ -121,15 +183,59 @@ export function Footer() {
           </p>
 
           <div className="flex gap-8 text-sm">
-            <a href="#" className="text-silk-white/30 hover:text-tea-sage transition-colors">
+            <button
+              onClick={() => setShowModal('privacy')}
+              className="text-silk-white/30 hover:text-tea-sage transition-colors cursor-pointer"
+            >
               隱私政策
-            </a>
-            <a href="#" className="text-silk-white/30 hover:text-tea-sage transition-colors">
+            </button>
+            <button
+              onClick={() => setShowModal('terms')}
+              className="text-silk-white/30 hover:text-tea-sage transition-colors cursor-pointer"
+            >
               服務條款
-            </a>
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-tea-ink/90 backdrop-blur-sm"
+            onClick={() => setShowModal(null)}
+          ></div>
+
+          {/* Modal Content */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative bg-silk-white max-w-2xl w-full max-h-[80vh] overflow-hidden"
+          >
+            {/* Header */}
+            <div className="sticky top-0 bg-tea-ink px-6 py-4 flex items-center justify-between">
+              <h3 className="font-serif text-xl text-silk-white">
+                {showModal === 'privacy' ? '隱私政策' : '服務條款'}
+              </h3>
+              <button
+                onClick={() => setShowModal(null)}
+                className="text-silk-white/70 hover:text-silk-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 overflow-y-auto max-h-[calc(80vh-60px)]">
+              <pre className="whitespace-pre-wrap font-sans text-sm text-charcoal leading-relaxed">
+                {showModal === 'privacy' ? privacyContent : termsContent}
+              </pre>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </footer>
   )
 }

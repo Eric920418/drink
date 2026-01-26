@@ -251,9 +251,18 @@ export function Franchise() {
             >
               立即諮詢
             </a>
-            <button className="px-10 py-4 border border-silk-white/20 text-silk-white/70 hover:text-silk-white hover:border-tea-sage/50 tracking-wider transition-all">
+            <a
+              href="/files/franchise-guide.pdf"
+              download="茶客棧加盟說明書.pdf"
+              onClick={(e) => {
+                // 如果文件不存在，顯示提示
+                e.preventDefault()
+                alert('加盟說明書準備中，請先聯繫我們取得詳細資料。')
+              }}
+              className="px-10 py-4 border border-silk-white/20 text-silk-white/70 hover:text-silk-white hover:border-tea-sage/50 tracking-wider transition-all cursor-pointer"
+            >
               下載加盟說明書
-            </button>
+            </a>
           </div>
         </motion.div>
       </div>

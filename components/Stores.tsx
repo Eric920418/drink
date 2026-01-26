@@ -155,7 +155,10 @@ export function Stores() {
                         查看地圖
                       </a>
                     ) : (
-                      <button className="flex-1 py-3 bg-tea-ink text-silk-white text-sm tracking-wider hover:bg-tea-forest transition-colors">
+                      <button
+                        onClick={() => alert('地圖連結準備中，請先電洽門市：' + (store.phone || '0800-TEA-TIME'))}
+                        className="flex-1 py-3 bg-tea-ink/70 text-silk-white/70 text-sm tracking-wider hover:bg-tea-ink hover:text-silk-white transition-colors cursor-pointer"
+                      >
                         查看地圖
                       </button>
                     )}
@@ -164,7 +167,10 @@ export function Stores() {
                         線上訂購
                       </a>
                     ) : (
-                      <button className="flex-1 py-3 border border-tea-ink/20 text-tea-ink text-sm tracking-wider hover:border-tea-ink transition-colors">
+                      <button
+                        onClick={() => alert('線上訂購功能即將開放，敬請期待！')}
+                        className="flex-1 py-3 border border-tea-ink/20 text-tea-ink/70 text-sm tracking-wider hover:border-tea-ink hover:text-tea-ink transition-colors cursor-pointer"
+                      >
                         線上訂購
                       </button>
                     )}

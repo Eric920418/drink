@@ -149,7 +149,7 @@ export function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.7 }}
-                className="max-w-lg mb-12"
+                className="max-w-lg mb-8"
               >
                 <p className="text-silk-white/60 text-lg leading-relaxed">
                   在快節奏的都市中，為您保留一方寧靜的茶香天地。

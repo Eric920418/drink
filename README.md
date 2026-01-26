@@ -283,6 +283,21 @@ pnpm db:studio    # 開啟 Prisma Studio
 - `.animate-ink` - 墨暈擴散動畫
 - `.font-serif` - 書法風格標題字體
 
+## 已知限制與待完成功能
+
+### 前台功能
+- **社群連結**：目前連結至預設的 Instagram/Facebook 頁面（teainn.tw），需在上線前更新為實際社群連結
+- **加盟說明書**：點擊後會顯示提示訊息，需上傳實際 PDF 文件至 `/public/files/franchise-guide.pdf`
+- **門市地圖/線上訂購**：需在後台為各門市設定 `mapUrl` 和 `orderUrl`，否則會顯示提示訊息
+- **活動圖片**：需在後台為活動上傳圖片，否則會顯示品牌風格的佔位圖
+
+### 後台設定
+在 CMS 後台可管理以下內容：
+- 門市的 Google Maps 連結（mapUrl）
+- 門市的線上訂購連結（orderUrl）
+- 活動圖片上傳
+- 社群連結（可在頁面內容中編輯 footer 區塊）
+
 ## 注意事項
 
 ### R2 圖片存儲設定
