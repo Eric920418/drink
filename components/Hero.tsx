@@ -168,14 +168,14 @@ export function Hero() {
                 transition={{ duration: 1, delay: 0.4 }}
                 className="relative mb-8"
               >
-                <h1 className="font-serif leading-[0.9] tracking-tight">
-                  <span className="block text-[clamp(4rem,12vw,9rem)] text-silk-white">
+                <h1 className="font-serif tracking-tight">
+                  <span className="block text-[clamp(4rem,12vw,9rem)] text-silk-white leading-none">
                     {data.title}
                   </span>
-                  <span className="block text-[clamp(2rem,5vw,3.5rem)] text-tea-sage/80 mt-2">
+                  <span className="block text-[clamp(1.75rem,4vw,2.75rem)] text-tea-sage/80 mt-6">
                     {data.tagline1}
                   </span>
-                  <span className="block text-[clamp(2rem,5vw,3.5rem)] text-transparent bg-clip-text bg-gradient-to-r from-terracotta via-rust-copper to-terracotta">
+                  <span className="block text-[clamp(1.75rem,4vw,2.75rem)] text-transparent bg-clip-text bg-gradient-to-r from-terracotta via-rust-copper to-terracotta mt-2">
                     {data.tagline2}
                   </span>
                 </h1>
