@@ -30,6 +30,16 @@ interface FranchiseContent {
   ctaDescription: string
 }
 
+interface SiteSettings {
+  phone: string
+  email: string
+}
+
+const defaultSettings: SiteSettings = {
+  phone: '0800-TEA-TIME',
+  email: 'franchise@teainn.tw',
+}
+
 const iconMap: Record<string, LucideIcon> = {
   TrendingUp,
   Award,
@@ -69,6 +79,7 @@ const defaultContent: FranchiseContent = {
 export default function FranchisePage() {
   const [plans, setPlans] = useState<FranchisePlan[]>([])
   const [content, setContent] = useState<FranchiseContent>(defaultContent)
+  const [settings, setSettings] = useState<SiteSettings>(defaultSettings)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
@@ -85,10 +96,11 @@ export default function FranchisePage() {
       try {
         setLoading(true)
 
-        // Fetch plans and content in parallel
-        const [plansRes, contentRes] = await Promise.all([
+        // Fetch plans, content and settings in parallel
+        const [plansRes, contentRes, settingsRes] = await Promise.all([
           fetch('/api/franchise-plans'),
-          fetch('/api/content/franchise')
+          fetch('/api/content/franchise'),
+          fetch('/api/settings')
         ])
 
         if (plansRes.ok) {
@@ -99,6 +111,14 @@ export default function FranchisePage() {
         if (contentRes.ok) {
           const contentData = await contentRes.json()
           setContent({ ...defaultContent, ...contentData })
+        }
+
+        if (settingsRes.ok) {
+          const settingsData = await settingsRes.json()
+          setSettings({
+            phone: settingsData.phone || defaultSettings.phone,
+            email: settingsData.email || defaultSettings.email,
+          })
         }
 
         setError(null)
@@ -511,17 +531,17 @@ export default function FranchisePage() {
                 <p className="text-silk-white/50 text-sm mb-6">我們的加盟顧問隨時為您解答</p>
                 <div className="flex flex-wrap gap-4">
                   <a
-                    href="tel:0800-TEA-TIME"
+                    href={`tel:${settings.phone}`}
                     className="inline-flex items-center gap-2 text-terracotta hover:text-rust-copper transition-colors"
                   >
-                    <span>0800-TEA-TIME</span>
+                    <span>{settings.phone}</span>
                   </a>
                   <span className="text-silk-white/30">|</span>
                   <a
-                    href="mailto:franchise@teainn.tw"
+                    href={`mailto:${settings.email}`}
                     className="text-silk-white/60 hover:text-silk-white transition-colors"
                   >
-                    franchise@teainn.tw
+                    {settings.email}
                   </a>
                 </div>
               </div>

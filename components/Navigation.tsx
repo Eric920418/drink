@@ -7,11 +7,21 @@ import Image from 'next/image'
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const [email, setEmail] = useState('hello@teainn.tw')
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data?.email) setEmail(data.email)
+      })
+      .catch(() => {})
   }, [])
 
   const navItems = [
@@ -188,7 +198,7 @@ export function Navigation() {
                 className="absolute bottom-12 left-8 right-8"
               >
                 <div className="flex items-center justify-between text-silk-white/40 text-sm">
-                  <span>hello@teainn.tw</span>
+                  <span>{email}</span>
                   <span className="font-serif">Est. 2020</span>
                 </div>
               </motion.div>
