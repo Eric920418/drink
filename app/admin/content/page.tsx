@@ -468,29 +468,18 @@ const contentSections: SectionConfig[] = [
   },
   {
     key: "contact",
-    name: "聯絡方式",
+    name: "聯絡方式（額外資訊）",
     fields: [
-      { name: "phone", label: "客服專線", type: "text" },
-      { name: "phone2", label: "客服電話2", type: "text" },
-      { name: "email", label: "電子郵件", type: "text" },
-      { name: "email2", label: "加盟電子郵件", type: "text" },
-      { name: "address", label: "總部地址", type: "text" },
-      { name: "businessHours", label: "服務時間", type: "text" },
+      { name: "phone2", label: "客服電話2（備用）", type: "text" },
+      { name: "email2", label: "加盟專用信箱", type: "text" },
       { name: "businessHours2", label: "休息日說明", type: "text" },
     ],
   },
   {
     key: "footer",
-    name: "頁尾資訊",
+    name: "頁尾資訊（額外資訊）",
     fields: [
       { name: "description", label: "品牌描述", type: "textarea" },
-      { name: "instagram", label: "Instagram 連結", type: "text" },
-      { name: "facebook", label: "Facebook 連結", type: "text" },
-      { name: "email", label: "電子郵件", type: "text" },
-      { name: "phone", label: "客服專線", type: "text" },
-      { name: "address", label: "總部地址", type: "text" },
-      { name: "businessHours", label: "營業時間", type: "text" },
-      { name: "copyright", label: "版權聲明", type: "text" },
     ],
   },
 ];
