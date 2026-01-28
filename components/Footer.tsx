@@ -91,21 +91,23 @@ export function Footer() {
   const [data, setData] = useState<FooterData>(defaultData)
 
   useEffect(() => {
-    fetch('/api/content/footer')
-      .then(res => res.ok ? res.json() : null)
-      .then(payload => {
-        if (payload) {
-          setData({
-            description: payload.description || defaultData.description,
-            instagram: payload.instagram || defaultData.instagram,
-            facebook: payload.facebook || defaultData.facebook,
-            email: payload.email || defaultData.email,
-            phone: payload.phone || defaultData.phone,
-            address: payload.address || defaultData.address,
-            businessHours: payload.businessHours || defaultData.businessHours,
-            copyright: payload.copyright || defaultData.copyright,
-          })
-        }
+    // 同時獲取網站設定和頁面內容，網站設定優先
+    Promise.all([
+      fetch('/api/settings').then(res => res.ok ? res.json() : null),
+      fetch('/api/content/footer').then(res => res.ok ? res.json() : null)
+    ])
+      .then(([settings, contentPayload]) => {
+        // 合併數據：網站設定 > 頁面內容 > 預設值
+        setData({
+          description: contentPayload?.description || defaultData.description,
+          instagram: settings?.instagram || contentPayload?.instagram || defaultData.instagram,
+          facebook: settings?.facebook || contentPayload?.facebook || defaultData.facebook,
+          email: settings?.email || contentPayload?.email || defaultData.email,
+          phone: settings?.phone || contentPayload?.phone || defaultData.phone,
+          address: settings?.address || contentPayload?.address || defaultData.address,
+          businessHours: settings?.businessHours || contentPayload?.businessHours || defaultData.businessHours,
+          copyright: settings?.copyright || contentPayload?.copyright || defaultData.copyright,
+        })
       })
       .catch(err => console.error('Failed to fetch footer data:', err))
   }, [])

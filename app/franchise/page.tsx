@@ -183,11 +183,7 @@ export default function FranchisePage() {
                 <span className="text-terracotta text-xs tracking-[0.3em] uppercase">Franchise</span>
               </div>
               <h1 className="font-serif text-5xl lg:text-7xl text-silk-white mb-6">
-                {content.title.includes('合作') ? (
-                  <>加盟<span className="text-tea-sage">合作</span></>
-                ) : (
-                  content.title
-                )}
+                {content.title}
               </h1>
               <p className="text-silk-white/60 text-lg leading-relaxed mb-10 max-w-lg">
                 {content.description}

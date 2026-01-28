@@ -36,20 +36,22 @@ export function Contact() {
   const [contactData, setContactData] = useState<ContactData>(defaultContactData)
 
   useEffect(() => {
-    fetch('/api/content/contact')
-      .then(res => res.ok ? res.json() : null)
-      .then(payload => {
-        if (payload) {
-          setContactData({
-            phone: payload.phone || defaultContactData.phone,
-            phone2: payload.phone2 || defaultContactData.phone2,
-            email: payload.email || defaultContactData.email,
-            email2: payload.email2 || defaultContactData.email2,
-            address: payload.address || defaultContactData.address,
-            businessHours: payload.businessHours || defaultContactData.businessHours,
-            businessHours2: payload.businessHours2 || defaultContactData.businessHours2,
-          })
-        }
+    // 同時獲取網站設定和頁面內容，網站設定優先
+    Promise.all([
+      fetch('/api/settings').then(res => res.ok ? res.json() : null),
+      fetch('/api/content/contact').then(res => res.ok ? res.json() : null)
+    ])
+      .then(([settings, payload]) => {
+        // 合併數據：網站設定 > 頁面內容 > 預設值
+        setContactData({
+          phone: settings?.phone || payload?.phone || defaultContactData.phone,
+          phone2: payload?.phone2 || defaultContactData.phone2,
+          email: settings?.email || payload?.email || defaultContactData.email,
+          email2: payload?.email2 || defaultContactData.email2,
+          address: settings?.address || payload?.address || defaultContactData.address,
+          businessHours: settings?.businessHours || payload?.businessHours || defaultContactData.businessHours,
+          businessHours2: payload?.businessHours2 || defaultContactData.businessHours2,
+        })
       })
       .catch(err => console.error('Failed to fetch contact data:', err))
   }, [])
