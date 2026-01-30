@@ -1,8 +1,8 @@
-import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import SessionProvider from "@/components/providers/SessionProvider";
 import Sidebar from "@/components/admin/Sidebar";
+import AuthGuard from "@/components/admin/AuthGuard";
 
 export const metadata = {
   title: "後台管理 | 茶客棧",
@@ -21,16 +21,18 @@ export default async function AdminLayout({
 
   return (
     <SessionProvider>
-      {session ? (
-        <div className="min-h-screen bg-gray-100">
-          <Sidebar />
-          <main className="ml-64 min-h-screen transition-all duration-300">
-            <div className="p-6">{children}</div>
-          </main>
-        </div>
-      ) : (
-        <div className="min-h-screen bg-gray-100">{children}</div>
-      )}
+      <AuthGuard>
+        {session ? (
+          <div className="min-h-screen bg-gray-100">
+            <Sidebar />
+            <main className="ml-64 min-h-screen transition-all duration-300">
+              <div className="p-6">{children}</div>
+            </main>
+          </div>
+        ) : (
+          <div className="min-h-screen bg-gray-100">{children}</div>
+        )}
+      </AuthGuard>
     </SessionProvider>
   );
 }
