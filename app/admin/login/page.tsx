@@ -1,17 +1,43 @@
 "use client";
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Coffee, Eye, EyeOff } from "lucide-react";
+import { Coffee, Eye, EyeOff, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { status } = useSession();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // 如果已登入，自動導向 dashboard
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/admin/dashboard");
+    }
+  }, [status, router]);
+
+  // 檢查 session 狀態時顯示載入畫面
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#2F090C] to-[#4a1518]">
+        <Loader2 className="w-8 h-8 text-[#c9a227] animate-spin" />
+      </div>
+    );
+  }
+
+  // 已登入狀態，等待導向（避免閃爍）
+  if (status === "authenticated") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#2F090C] to-[#4a1518]">
+        <Loader2 className="w-8 h-8 text-[#c9a227] animate-spin" />
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
