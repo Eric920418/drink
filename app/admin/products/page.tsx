@@ -24,6 +24,7 @@ interface Product {
   isActive: boolean;
   isFeatured: boolean;
   isNew: boolean;
+  showPrice: boolean;
   order: number;
 }
 
@@ -47,6 +48,7 @@ export default function ProductsPage() {
     isActive: true,
     isFeatured: false,
     isNew: false,
+    showPrice: true,
     order: "0",
     calories: "",
     tags: [] as string[],
@@ -144,6 +146,7 @@ export default function ProductsPage() {
       isActive: true,
       isFeatured: false,
       isNew: false,
+      showPrice: true,
       order: "0",
       calories: "",
       tags: [],
@@ -164,6 +167,7 @@ export default function ProductsPage() {
       isActive: product.isActive,
       isFeatured: product.isFeatured,
       isNew: product.isNew,
+      showPrice: product.showPrice ?? true,
       order: product.order.toString(),
       calories: "",
       tags: [],
@@ -460,7 +464,7 @@ export default function ProductsPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-6 flex-wrap">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
@@ -496,6 +500,17 @@ export default function ProductsPage() {
                       className="w-4 h-4 rounded border-gray-300 text-[#c9a227] focus:ring-[#c9a227]"
                     />
                     <span className="text-sm text-gray-700">新品</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.showPrice}
+                      onChange={(e) =>
+                        setFormData({ ...formData, showPrice: e.target.checked })
+                      }
+                      className="w-4 h-4 rounded border-gray-300 text-[#c9a227] focus:ring-[#c9a227]"
+                    />
+                    <span className="text-sm text-gray-700">顯示價格</span>
                   </label>
                 </div>
 

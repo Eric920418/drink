@@ -57,6 +57,7 @@ model Product {
   isActive     Boolean   @default(true)
   isFeatured   Boolean   @default(false) // 是否為推薦產品
   isNew        Boolean   @default(false) // 是否為新品
+  showPrice    Boolean   @default(true)  // 前台是否顯示價格
   order        Int       @default(0)
 
   // 額外資訊

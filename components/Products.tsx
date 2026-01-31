@@ -21,6 +21,7 @@ interface Product {
   tags: string[]
   isNew: boolean
   isFeatured: boolean
+  showPrice: boolean
 }
 
 export function Products() {
@@ -176,15 +177,17 @@ export function Products() {
                     <div className="absolute inset-0 bg-gradient-to-t from-tea-ink/60 via-tea-ink/20 to-transparent"></div>
 
                     {/* Price Tag - 印章風格 */}
-                    <div className="absolute top-6 right-6">
-                      <div className="relative w-16 h-16 flex items-center justify-center bg-terracotta rotate-3 group-hover:rotate-0 transition-transform duration-300">
-                        <div className="absolute inset-1 border border-silk-white/30"></div>
-                        <div className="text-center text-silk-white">
-                          <span className="text-[10px] block">NT$</span>
-                          <span className="font-serif text-xl">{product.price}</span>
+                    {product.showPrice !== false && (
+                      <div className="absolute top-6 right-6">
+                        <div className="relative w-16 h-16 flex items-center justify-center bg-terracotta rotate-3 group-hover:rotate-0 transition-transform duration-300">
+                          <div className="absolute inset-1 border border-silk-white/30"></div>
+                          <div className="text-center text-silk-white">
+                            <span className="text-[10px] block">NT$</span>
+                            <span className="font-serif text-xl">{product.price}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Category Badge */}
                     <div className="absolute top-6 left-6 flex gap-2">
