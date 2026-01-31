@@ -172,7 +172,7 @@ export function Hero() {
                   <span className="block text-[clamp(4rem,12vw,9rem)] text-silk-white leading-none">
                     {data.title}
                   </span>
-                  <span className="block text-[clamp(1.75rem,4vw,2.75rem)] text-tea-sage/80 mt-6">
+                  <span className="block text-[clamp(1.75rem,4vw,2.75rem)] text-tea-sage/80 mt-2">
                     {data.tagline1}
                   </span>
                   <span className="block text-[clamp(1.75rem,4vw,2.75rem)] text-transparent bg-clip-text bg-gradient-to-r from-terracotta via-rust-copper to-terracotta mt-2">

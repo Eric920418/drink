@@ -330,6 +330,7 @@ pnpm db:studio    # 開啟 Prisma Studio
 2. 創建 API Token（需要 R2 讀寫權限）
 3. 設定公開存取（如需要）
 4. 在 `.env` 填入相關憑證
+5. **重要**：確保 `next.config.ts` 的 `images.remotePatterns` 包含 R2 的公開 URL 域名，否則前台無法顯示圖片
 
 如果未配置 R2，圖片將存儲在本地 `/public/uploads` 目錄。
 
