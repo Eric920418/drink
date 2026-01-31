@@ -10,7 +10,7 @@ interface AboutData {
   description2: string
   image: string
   quote: string
-  stats: Array<{ number: string; label: string }>
+  stats: Array<{ value: string; label: string }>
 }
 
 const defaultData: AboutData = {
@@ -20,9 +20,9 @@ const defaultData: AboutData = {
   image: 'https://images.unsplash.com/photo-1602943543714-cf535b048440?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWElMjBsZWF2ZXN8ZW58MXx8fHwxNzY4Nzc5NTI4fDA&ixlib=rb-4.1.0&q=80&w=1080',
   quote: '一期一會，珍惜每一杯茶的相遇',
   stats: [
-    { number: '500+', label: '每日新鮮茶飲' },
-    { number: '15+', label: '直營門市據點' },
-    { number: '98%', label: '顧客滿意度' },
+    { value: '500+', label: '每日新鮮茶飲' },
+    { value: '15+', label: '直營門市據點' },
+    { value: '98%', label: '顧客滿意度' },
   ]
 }
 
@@ -167,7 +167,7 @@ export function About() {
                   className="text-center lg:text-left"
                 >
                   <div className="font-serif text-3xl lg:text-4xl text-terracotta mb-1">
-                    {stat.number}
+                    {stat.value}
                   </div>
                   <div className="text-mist-gray text-xs lg:text-sm">{stat.label}</div>
                 </motion.div>
