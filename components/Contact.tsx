@@ -14,22 +14,16 @@ interface FormData {
 
 interface ContactData {
   phone: string
-  phone2: string
   email: string
-  email2: string
   address: string
   businessHours: string
-  businessHours2: string
 }
 
 const defaultContactData: ContactData = {
   phone: '0800-TEA-TIME',
-  phone2: '(02) 2345-6789',
   email: 'hello@teainn.tw',
-  email2: 'franchise@teainn.tw (加盟)',
   address: '台北市信義區信義路五段7號12樓',
-  businessHours: '週一至週五 09:00 - 18:00',
-  businessHours2: '週六、日及國定假日休息'
+  businessHours: '週一至週五 09:00 - 18:00'
 }
 
 export function Contact() {
@@ -45,12 +39,9 @@ export function Contact() {
         // 合併數據：網站設定 > 頁面內容 > 預設值
         setContactData({
           phone: settings?.phone || payload?.phone || defaultContactData.phone,
-          phone2: payload?.phone2 || defaultContactData.phone2,
           email: settings?.email || payload?.email || defaultContactData.email,
-          email2: payload?.email2 || defaultContactData.email2,
           address: settings?.address || payload?.address || defaultContactData.address,
           businessHours: settings?.businessHours || payload?.businessHours || defaultContactData.businessHours,
-          businessHours2: payload?.businessHours2 || defaultContactData.businessHours2,
         })
       })
       .catch(err => console.error('Failed to fetch contact data:', err))
@@ -137,12 +128,12 @@ export function Contact() {
                 {
                   icon: Phone,
                   title: '客服專線',
-                  lines: [contactData.phone, contactData.phone2].filter(Boolean)
+                  lines: [contactData.phone].filter(Boolean)
                 },
                 {
                   icon: Mail,
                   title: '電子信箱',
-                  lines: [contactData.email, contactData.email2].filter(Boolean)
+                  lines: [contactData.email].filter(Boolean)
                 },
                 {
                   icon: MapPin,
@@ -152,7 +143,7 @@ export function Contact() {
                 {
                   icon: Clock,
                   title: '服務時間',
-                  lines: [contactData.businessHours, contactData.businessHours2].filter(Boolean)
+                  lines: [contactData.businessHours].filter(Boolean)
                 }
               ].map(({ icon: Icon, title, lines }) => (
                 <div key={title} className="flex items-start gap-5 group">

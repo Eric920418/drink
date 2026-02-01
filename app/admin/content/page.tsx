@@ -467,15 +467,6 @@ const contentSections: SectionConfig[] = [
     ],
   },
   {
-    key: "contact",
-    name: "聯絡方式（額外資訊）",
-    fields: [
-      { name: "phone2", label: "客服電話2（備用）", type: "text" },
-      { name: "email2", label: "加盟專用信箱", type: "text" },
-      { name: "businessHours2", label: "休息日說明", type: "text" },
-    ],
-  },
-  {
     key: "footer",
     name: "頁尾資訊（額外資訊）",
     fields: [
