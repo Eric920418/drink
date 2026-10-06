@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 
-// 禁用緩存，確保每次都獲取最新數據
-export const dynamic = 'force-dynamic';
+const getPublicSettings = unstable_cache(
+  () => prisma.siteSetting.findMany(),
+  ['public-site-settings'],
+  { revalidate: 3600, tags: ['public-site-settings'] },
+);
 
 // 公開 API：獲取網站設定
 export async function GET() {
   try {
-    const settings = await prisma.siteSetting.findMany();
+    const settings = await getPublicSettings();
 
     // 轉換為 key-value 對象
     const settingsObject: Record<string, string> = {};

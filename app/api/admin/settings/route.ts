@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { revalidateTag } from "next/cache";
 import { checkAdminAuth, errorResponse, successResponse } from "@/lib/api-auth";
 
 // 獲取所有網站設定
@@ -37,6 +38,7 @@ export async function POST(request: NextRequest) {
         update: { value: String(value) },
         create: { key, value: String(value) },
       });
+      revalidateTag("public-site-settings");
     }
 
     return successResponse({ message: "設定已更新" });
