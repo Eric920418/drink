@@ -4,6 +4,12 @@
 
 原始設計稿：[Figma](https://www.figma.com/design/2AX2u5R69cN4WfxmRvFEO4/%E9%A3%B2%E6%96%99%E5%BA%97%E5%AE%98%E7%B6%B2%E8%A8%AD%E8%A8%88)
 
+## 2026-10-06 Neon 降費：共用公開設定
+
+導覽列、頁尾、聯絡區與加盟頁各自 GET `/api/settings`，原本每次都查 Neon。公開設定查詢改用 Next.js Data Cache，一小時共用同一份結果；保留動態 HTTP 回應及既有錯誤處理，失敗的資料庫查詢不會寫入快取。後台每一筆 upsert 成功後立即 `revalidateTag("public-site-settings")`，即使批次途中失敗，先前已成功的值也能刷新；原本逐筆寫入語意與授權保留，不增加正式資料寫入或 schema 變更。後台 GET 設定仍直接查詢，私人資料沒有快取。
+
+驗證：`node --test tests/settings-cache.test.cjs` 使用 mock 確認公開讀取重用、授權前不寫入、成功／部分成功後刷新與失敗讀取不快取（保留原有 500 回應）；`pnpm exec tsc --noEmit`、`git diff --check`，正式環境候選建置與只讀 HTTP 檢查後才上線。沒有新增套件。節省取決於訪問量及 Neon 休眠狀況，不能直接把 API 減少比例當成費用比例。
+
 ## 功能特色
 
 ### 前台網站
